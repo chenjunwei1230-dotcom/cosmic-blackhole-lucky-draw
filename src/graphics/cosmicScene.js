@@ -3,9 +3,10 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { AccretionDiskShader } from './shaders.js';
+import { AccretionDiskShader, SaturnRingShader } from './shaders.js';
 import { SupernovaEffect } from './supernova.js';
 import { SaturnRing } from './saturnRing.js';
+import { createSaturnPlanetTexture, createSaturnRingTexture } from './saturnAssets.js';
 import { States } from '../core/fsm.js';
 
 export class CosmicScene {
@@ -17,7 +18,7 @@ export class CosmicScene {
 
     this.init();
     this.setupPostProcessing();
-    this.buildBlackHole();
+    this.buildSaturnBody();
     this.buildDistantStarfield();
     this.saturnRing = new SaturnRing(this.scene);
     this.supernova = new SupernovaEffect(this.scene);
@@ -34,7 +35,17 @@ export class CosmicScene {
       0.1,
       100
     );
-    this.camera.position.set(0, 0.15, 8.8);
+    // Camera angle: 12.0° elevation matching user's Saturn photo
+    this.camera.position.set(0, 1.45, 6.8);
+    this.camera.lookAt(0, 0, 0);
+
+    // Realistic cosmic lighting for Saturn's globe & rings
+    this.ambientLight = new THREE.AmbientLight(0xfff5e6, 0.7);
+    this.scene.add(this.ambientLight);
+
+    this.sunLight = new THREE.DirectionalLight(0xfffaea, 1.8);
+    this.sunLight.position.set(4, 5, 8);
+    this.scene.add(this.sunLight);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -69,33 +80,50 @@ export class CosmicScene {
     this.composer.addPass(outputPass);
   }
 
-  buildBlackHole() {
-    // 1. 黑洞纯黑视界奇点 (renderOrder 设高确保遮挡后方吸积盘)
-    const coreGeo = new THREE.SphereGeometry(0.74, 32, 32);
-    const coreMat = new THREE.MeshBasicMaterial({ color: 0x000000, depthWrite: true });
-    this.blackHoleCore = new THREE.Mesh(coreGeo, coreMat);
-    this.blackHoleCore.renderOrder = 10;
-    this.blackHoleCore.frustumCulled = false;
-    this.scene.add(this.blackHoleCore);
+  buildSaturnBody() {
+    this.saturnGroup = new THREE.Group();
+    // Subtle natural Saturn axial inclination
+    this.saturnGroup.rotation.z = -0.04;
+    this.scene.add(this.saturnGroup);
 
-    // 2. 双色吸积盘
-    const diskGeo = new THREE.PlaneGeometry(6.6, 6.6);
-    this.diskMaterial = new THREE.ShaderMaterial({
-      vertexShader: AccretionDiskShader.vertexShader,
-      fragmentShader: AccretionDiskShader.fragmentShader,
+    // 1. Saturn Globe Sphere (1.20 radius, photorealistic latitudinal cloud bands)
+    const planetTex = createSaturnPlanetTexture();
+    const planetGeo = new THREE.SphereGeometry(1.20, 64, 64);
+    const planetMat = new THREE.MeshStandardMaterial({
+      map: planetTex,
+      roughness: 0.82,
+      metalness: 0.05
+    });
+    this.saturnPlanet = new THREE.Mesh(planetGeo, planetMat);
+    this.saturnPlanet.castShadow = true;
+    this.saturnPlanet.receiveShadow = true;
+    this.saturnGroup.add(this.saturnPlanet);
+
+    // 2. Photorealistic Saturn Rings Mesh (C Ring, B Ring, Cassini Division, A Ring)
+    const ringTex = createSaturnRingTexture();
+    const innerRadius = 1.48;
+    const outerRadius = 4.25;
+    const ringGeo = new THREE.RingGeometry(innerRadius, outerRadius, 180, 1);
+
+    this.ringMaterial = new THREE.ShaderMaterial({
+      vertexShader: SaturnRingShader.vertexShader,
+      fragmentShader: SaturnRingShader.fragmentShader,
       uniforms: {
+        uRingTexture: { value: ringTex },
+        uInnerRadius: { value: innerRadius },
+        uOuterRadius: { value: outerRadius },
         uTime: { value: 0.0 }
       },
       transparent: true,
-      blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide,
-      depthWrite: false
+      depthWrite: false,
+      depthTest: true
     });
 
-    this.accretionDisk = new THREE.Mesh(diskGeo, this.diskMaterial);
-    this.accretionDisk.rotation.x = -Math.PI * 0.38;
-    this.accretionDisk.frustumCulled = false;
-    this.scene.add(this.accretionDisk);
+    this.saturnRingsMesh = new THREE.Mesh(ringGeo, this.ringMaterial);
+    // Lie horizontally in X-Z plane
+    this.saturnRingsMesh.rotation.x = -Math.PI / 2;
+    this.saturnGroup.add(this.saturnRingsMesh);
   }
 
 
@@ -169,16 +197,23 @@ export class CosmicScene {
       this.collapseProgress = Math.max(this.collapseProgress - delta * 0.8, 0.0);
     }
 
-    this.diskMaterial.uniforms.uTime.value = elapsedTime;
+    if (this.ringMaterial && this.ringMaterial.uniforms && this.ringMaterial.uniforms.uTime) {
+      this.ringMaterial.uniforms.uTime.value = elapsedTime;
+    }
 
     // 远景微弱旋转
     if (this.starfield) {
       this.starfield.rotation.z += delta * 0.002;
     }
 
-    // 吸积盘加速旋转
-    const spinFactor = 1.0 + this.collapseProgress * 3.5;
-    this.accretionDisk.rotation.z += delta * 0.16 * spinFactor;
+    // Saturn globe & rings rotation
+    if (this.saturnPlanet) {
+      this.saturnPlanet.rotation.y += delta * 0.03;
+    }
+    if (this.saturnRingsMesh) {
+      const spinFactor = 1.0 + this.collapseProgress * 3.5;
+      this.saturnRingsMesh.rotation.z += delta * 0.015 * spinFactor;
+    }
 
     // 3D 候选人土星环运动
     if (this.saturnRing) {

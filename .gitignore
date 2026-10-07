@@ -34,3 +34,4 @@ capture_*.cjs
 download_avatars.cjs
 actual_*.png
 hardware_*.png
+*preview*.png

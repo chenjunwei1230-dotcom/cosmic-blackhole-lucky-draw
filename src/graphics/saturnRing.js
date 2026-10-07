@@ -2,9 +2,10 @@ import * as THREE from 'three';
 import defaultEmployees from '../../employee.json' with { type: 'json' };
 
 /**
- * SaturnRing / AccretionVortex - Embedded 3D Swirling Attendee Fleet
- * Badges spin DIRECTLY WITH the black hole accretion disk (R = 1.35 to 2.90),
- * swirling in harmony with the cosmic matter, NOT outside.
+ * SaturnRing / FaceOnAvatarVortex
+ * Face-on (0° Tilt) Frontal Celestial Wheel of Attendee Photos
+ * Badges spin directly in the X-Y plane around the black hole ball,
+ * facing the camera directly in a mesmerizing circular cosmic vortex.
  */
 export class SaturnRing {
   constructor(scene) {
@@ -13,12 +14,11 @@ export class SaturnRing {
     this.scene.add(this.group);
 
     this.badges = [];
-    this.diskTiltX = -Math.PI * 0.38; // Matches accretion disk plane
-
-    this.group.rotation.x = this.diskTiltX;
+    // Subtle natural Saturn axial tilt
+    this.group.rotation.z = -0.04;
 
     this.winnerBadge = null;
-    this.winnerTargetPos = new THREE.Vector3(0, 0.2, 5.8);
+    this.winnerTargetPos = new THREE.Vector3(0, 0.35, 4.2);
     this.winnerCurrentPos = new THREE.Vector3();
     this.winnerProgress = 0.0;
 
@@ -30,24 +30,23 @@ export class SaturnRing {
     const count = list.length;
     if (count === 0) return;
 
-    // Distribute 100 attendees across 4 swirling tracks directly beside the ball in the accretion disk:
-    // Track 0: R = 1.15, 14 badges (directly hugging the black hole ball)
-    // Track 1: R = 1.65, 20 badges
-    // Track 2: R = 2.15, 28 badges
-    // Track 3: R = 2.70, 38 badges
-    // Total = 14 + 20 + 28 + 38 = 100 badges
+    // Distribute 100 attendees across 4 concentric circular tracks of the Saturn Ring (R = 1.80 to 3.75)
+    // Track 0: R = 1.80, 14 badges (Inner B Ring)
+    // Track 1: R = 2.40, 22 badges (Middle B Ring)
+    // Track 2: R = 3.10, 28 badges (A Ring inner, past Cassini division)
+    // Track 3: R = 3.75, 36 badges (A Ring outer)
+    // Total = 14 + 22 + 28 + 36 = 100 badges
     const trackConfigs = [
-      { radius: 1.15, count: 14, baseScale: 0.21, speed: 0.26 },
-      { radius: 1.65, count: 20, baseScale: 0.23, speed: 0.21 },
-      { radius: 2.15, count: 28, baseScale: 0.25, speed: 0.17 },
-      { radius: 2.70, count: 38, baseScale: 0.28, speed: 0.14 }
+      { radius: 1.80, count: 14, baseScale: 0.32, speed: 0.22 },
+      { radius: 2.40, count: 22, baseScale: 0.36, speed: 0.18 },
+      { radius: 3.10, count: 28, baseScale: 0.40, speed: 0.14 },
+      { radius: 3.75, count: 36, baseScale: 0.44, speed: 0.11 }
     ];
 
     let empIndex = 0;
     for (let t = 0; t < trackConfigs.length; t++) {
       const cfg = trackConfigs[t];
       const angleStep = (Math.PI * 2) / cfg.count;
-      // Stagger initial angle for each track to create organic spiral flow
       const trackOffset = (t * Math.PI) / 4;
 
       for (let i = 0; i < cfg.count && empIndex < count; i++) {
@@ -105,10 +104,11 @@ export class SaturnRing {
     // Asynchronously load attendee photo from local avatars
     const avatarUrl = emp.avatar ? emp.avatar.replace(/^\./, '') : `/avatars/${emp.id}.png`;
     const img = new Image();
+    badgeData.img = null;
     img.referrerPolicy = 'no-referrer';
-    img.crossOrigin = 'anonymous';
     img.onload = () => {
       badgeData.isImageLoaded = true;
+      badgeData.img = img;
       this._renderBadgeCanvas(badgeData, img);
     };
     img.onerror = () => {
@@ -121,7 +121,8 @@ export class SaturnRing {
     return badgeData;
   }
 
-  _renderBadgeCanvas(badgeData, img) {
+  _renderBadgeCanvas(badgeData, img = null) {
+    const activeImg = img || badgeData.img;
     const { canvas, ctx, emp, texture } = badgeData;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -141,9 +142,9 @@ export class SaturnRing {
       ctx.shadowColor = 'rgba(255, 215, 0, 0.95)';
       ctx.shadowBlur = 20;
     } else {
-      ctx.strokeStyle = 'rgba(245, 208, 97, 0.75)';
+      ctx.strokeStyle = 'rgba(245, 208, 97, 0.8)';
       ctx.lineWidth = 2.5;
-      ctx.shadowColor = 'rgba(245, 208, 97, 0.55)';
+      ctx.shadowColor = 'rgba(245, 208, 97, 0.6)';
       ctx.shadowBlur = 12;
     }
     ctx.stroke();
@@ -251,26 +252,26 @@ export class SaturnRing {
     for (let i = 0; i < this.badges.length; i++) {
       const b = this.badges[i];
 
-      // ── Winner Emergence Physics (Detach and fly to front screen) ──
+      // ── Winner Emergence Physics (Detach and fly towards camera) ──
       if (b === this.winnerBadge && (isSupernova || isReveal)) {
         this.winnerProgress = Math.min(this.winnerProgress + delta * 2.0, 1.0);
         const ease = 1 - Math.pow(1 - this.winnerProgress, 3); // cubic ease out
 
         // Animate from center forward directly to front screen view
         b.sprite.position.lerpVectors(this.winnerCurrentPos, this.winnerTargetPos, ease);
-        const targetScale = b.baseScale * (1.0 + ease * 3.8); // expand into hero size
+        const targetScale = b.baseScale * (1.0 + ease * 3.6);
         b.sprite.scale.set(targetScale, targetScale * 1.06, 1.0);
         b.sprite.material.opacity = 1.0;
         continue;
       }
 
-      // ── Normal Accretion Vortex Motion ──
+      // ── Normal Face-on Circular Vortex Motion ──
       let targetRadiusRatio = 1.0;
       let spiralAngleOffset = 0.0;
 
       if (isCollapsing) {
         // Contract along smooth Archimedean spiral directly into event horizon
-        targetRadiusRatio = 1.0 - Math.min(collapseProgress * 0.70, 0.75);
+        targetRadiusRatio = 1.0 - Math.min(collapseProgress * 0.72, 0.76);
         spiralAngleOffset = collapseProgress * Math.PI * 3.0;
       } else if (isStopping) {
         targetRadiusRatio = 0.30;
@@ -285,16 +286,15 @@ export class SaturnRing {
       const targetRadius = b.baseRadius * targetRadiusRatio;
       b.currentRadius += (targetRadius - b.currentRadius) * Math.min(delta * 3.5, 0.3);
 
-      // Swirl angle progresses at Keplerian speed WITH the accretion disk
+      // Swirl angle progresses at differential speed in the X-Y plane
       b.currentAngle += b.speed * speedMult * delta;
 
       const renderAngle = b.currentAngle + spiralAngleOffset;
 
-      // Position in accretion disk frame
+      // 3D Saturn Ring orbital coordinates (X-Z plane)
       const x = Math.cos(renderAngle) * b.currentRadius;
+      const y = 0.0;
       const z = Math.sin(renderAngle) * b.currentRadius;
-      // Subtle vertical wave during collapse, flat during idle
-      const y = isCollapsing ? Math.sin(renderAngle * 2.0) * 0.06 : 0.0;
 
       b.sprite.position.set(x, y, z);
 

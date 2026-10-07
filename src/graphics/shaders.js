@@ -38,6 +38,37 @@ export const AccretionDiskShader = {
   `
 };
 
+export const SaturnRingShader = {
+  vertexShader: `
+    varying vec2 vPos;
+    void main() {
+      vPos = position.xy;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D uRingTexture;
+    uniform float uInnerRadius;
+    uniform float uOuterRadius;
+    uniform float uTime;
+    varying vec2 vPos;
+
+    void main() {
+      float r = length(vPos);
+      if (r < uInnerRadius || r > uOuterRadius) discard;
+
+      float u = (r - uInnerRadius) / (uOuterRadius - uInnerRadius);
+      vec4 ringTex = texture2D(uRingTexture, vec2(u, 0.5));
+
+      // Subtle dynamic ring shimmer
+      float angle = atan(vPos.y, vPos.x);
+      float shimmer = 1.0 + 0.04 * sin(angle * 28.0 + uTime * 0.5);
+
+      gl_FragColor = vec4(ringTex.rgb * shimmer, ringTex.a);
+    }
+  `
+};
+
 export const ParticleShader = {
   vertexShader: `
     uniform float uTime;
