@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Cosmic Black Hole Gala - Stage Display</title>
+  <script type="module" crossorigin src="./assets/index-5dSP7nij.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BXxnyvK-.css">
+</head>
+<body>
+  <div id="webgl-container"></div>
+
+  <div id="stage-hud">
+    <!-- Unified Luxury Broadcast Navigation Bar (Never Overlaps) -->
+    <header class="gala-top-bar admin-control">
+      <!-- Left: Event Branding & Live Status -->
+      <div class="top-brand-pill">
+        <span class="brand-sparkle">✦</span>
+        <span class="brand-title">CELESTIAL GALA</span>
+        <span class="brand-year">2026</span>
+        <div class="brand-status-divider"></div>
+        <div class="hud-status-badge">
+          <span class="status-pulse"></span>
+          <span id="hud-status" class="status-active">IDLE</span>
+        </div>
+      </div>
+
+      <!-- Center: Current Prize Tier & Batch Selection Dock -->
+      <div class="top-prize-dock">
+        <!-- Prize Tier Selector -->
+        <div class="tier-select-wrapper">
+          <div class="tier-dropdown-container">
+            <button id="tier-dropdown-btn" class="tier-current-btn" aria-label="Select Prize Tier">
+              <span id="current-tier-icon" class="tier-icon">🌟</span>
+              <span id="current-tier-name" class="tier-name">Grand Prize</span>
+              <span id="current-tier-quota" class="tier-quota-tag">1 Pax</span>
+              <span class="dropdown-arrow">▾</span>
+            </button>
+            <div id="tier-menu" class="tier-dropdown-menu"></div>
+          </div>
+        </div>
+
+        <div class="nav-divider"></div>
+
+        <!-- Batch Draw Selector -->
+        <div class="batch-select-wrapper">
+          <div class="batch-btn-group">
+            <button class="batch-btn active" data-count="1">x1</button>
+            <button class="batch-btn" data-count="5">x5</button>
+            <button class="batch-btn" data-count="10">x10</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Action Controls Dock -->
+      <div class="top-actions-dock">
+        <button id="btn-roster" class="top-dock-btn" title="View Candidate Roster & Photos (R)">
+          <span class="btn-icon">👥</span>
+          <span class="btn-text">ROSTER</span>
+          <span class="btn-count-badge" id="top-roster-count">100</span>
+        </button>
+
+        <button id="btn-winners" class="top-dock-btn" title="View Winners History (W)">
+          <span class="btn-icon">🏆</span>
+          <span class="btn-text">WINNERS</span>
+          <span class="btn-count-badge" id="top-winners-count">0</span>
+        </button>
+
+        <button id="btn-settings" class="top-dock-btn" title="Open Prize & Gala Settings (S)">
+          <span class="btn-icon">⚙️</span>
+          <span class="btn-text">SETTINGS</span>
+        </button>
+
+        <button id="btn-sound" class="top-dock-btn icon-only" title="Toggle Audio FX (M)">
+          <span class="btn-icon" id="sound-icon">🔊</span>
+        </button>
+
+        <button id="btn-hotkeys" class="top-dock-btn icon-only" title="Stage Director Hotkeys (?)">
+          <span class="btn-icon">⌨️</span>
+        </button>
+
+        <button id="btn-clean" class="top-dock-btn icon-only" title="Toggle Clean Mode (C)">
+          <span class="btn-icon">👁</span>
+        </button>
+
+        <button id="btn-fullscreen" class="top-dock-btn icon-only" title="Toggle Fullscreen (F)">
+          <span class="btn-icon">⛶</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Bottom Left: Pool Capacity & Data Controls -->
+    <div class="hud-bottom-bar admin-control">
+      <div class="pool-glass-card">
+        <div class="pool-meta">
+          <span class="meta-label">CANDIDATE POOL</span>
+          <span class="meta-val"><strong id="hud-available">100</strong> / <span id="hud-total">100</span></span>
+        </div>
+        <div class="pool-actions">
+          <button id="btn-import" class="glass-btn">IMPORT</button>
+          <button id="btn-reset" class="glass-btn glass-btn-muted">RESET</button>
+        </div>
+      </div>
+      <input type="file" id="roster-import" accept=".json,.csv,.txt" style="display:none" />
+    </div>
+
+    <!-- Bottom Right: Winners Stat Pill -->
+    <div class="hud-stats-bottom">
+      <div class="stats-glass-pill">
+        <span class="stats-label">AWARDS</span>
+        <span class="stats-num" id="hud-winner-count">0</span>
+        <span class="stats-sep">/</span>
+        <span class="stats-sub" id="hud-tier-drawn-count">TIER: 0</span>
+      </div>
+    </div>
+
+    <!-- Hidden elements kept for backward compatibility with main.js -->
+    <div style="display:none">
+      <span id="hud-count">100</span>
+    </div>
+
+    <!-- Bottom Center: Cinematic Atmospheric Prompt -->
+    <div class="hud-center-tip" id="hud-tip">CLICK OR PRESS [SPACE] TO INITIATE DRAW</div>
+  </div>
+
+</body>
+</html>

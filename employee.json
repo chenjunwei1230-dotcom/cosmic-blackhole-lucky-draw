@@ -1,0 +1,602 @@
+[
+  {
+    "id": "AOT001",
+    "name": "Eren Yeager",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT001.png"
+  },
+  {
+    "id": "AOT002",
+    "name": "Mikasa Ackerman",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT002.png"
+  },
+  {
+    "id": "AOT003",
+    "name": "Armin Arlert",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT003.png"
+  },
+  {
+    "id": "AOT004",
+    "name": "Reiner Braun",
+    "department": "Marley Warriors",
+    "avatar": "./avatars/AOT004.png"
+  },
+  {
+    "id": "AOT005",
+    "name": "Bertholdt Hoover",
+    "department": "Marley Warriors",
+    "avatar": "./avatars/AOT005.png"
+  },
+  {
+    "id": "AOT006",
+    "name": "Annie Leonhart",
+    "department": "Military Police / Marley Warriors",
+    "avatar": "./avatars/AOT006.png"
+  },
+  {
+    "id": "AOT007",
+    "name": "Jean Kirstein",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT007.png"
+  },
+  {
+    "id": "AOT008",
+    "name": "Marco Bott",
+    "department": "104th Training Corps",
+    "avatar": "./avatars/AOT008.png"
+  },
+  {
+    "id": "AOT009",
+    "name": "Connie Springer",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT009.png"
+  },
+  {
+    "id": "AOT010",
+    "name": "Sasha Braus",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT010.png"
+  },
+  {
+    "id": "AOT011",
+    "name": "Historia Reiss",
+    "department": "Royal Government",
+    "avatar": "./avatars/AOT011.png"
+  },
+  {
+    "id": "AOT012",
+    "name": "Ymir",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT012.png"
+  },
+  {
+    "id": "AOT013",
+    "name": "Thomas Wagner",
+    "department": "104th Training Corps",
+    "avatar": "./avatars/AOT013.png"
+  },
+  {
+    "id": "AOT014",
+    "name": "Mina Carolina",
+    "department": "104th Training Corps",
+    "avatar": "./avatars/AOT014.png"
+  },
+  {
+    "id": "AOT015",
+    "name": "Daz",
+    "department": "Yeagerists",
+    "avatar": "./avatars/AOT015.png"
+  },
+  {
+    "id": "AOT016",
+    "name": "Samuel Linke-Jackson",
+    "department": "Yeagerists",
+    "avatar": "./avatars/AOT016.png"
+  },
+  {
+    "id": "AOT017",
+    "name": "Franz Kefka",
+    "department": "104th Training Corps",
+    "avatar": "./avatars/AOT017.png"
+  },
+  {
+    "id": "AOT018",
+    "name": "Hannah Diamant",
+    "department": "104th Training Corps",
+    "avatar": "./avatars/AOT018.png"
+  },
+  {
+    "id": "AOT019",
+    "name": "Erwin Smith",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT019.png"
+  },
+  {
+    "id": "AOT020",
+    "name": "Levi Ackerman",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT020.png"
+  },
+  {
+    "id": "AOT021",
+    "name": "Hange Zoë",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT021.png"
+  },
+  {
+    "id": "AOT022",
+    "name": "Miche Zacharius",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT022.png"
+  },
+  {
+    "id": "AOT023",
+    "name": "Moblit Berner",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT023.png"
+  },
+  {
+    "id": "AOT024",
+    "name": "Nanaba",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT024.png"
+  },
+  {
+    "id": "AOT025",
+    "name": "Gelgar",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT025.png"
+  },
+  {
+    "id": "AOT026",
+    "name": "Henning",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT026.png"
+  },
+  {
+    "id": "AOT027",
+    "name": "Lynne",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT027.png"
+  },
+  {
+    "id": "AOT028",
+    "name": "Nifa",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT028.png"
+  },
+  {
+    "id": "AOT029",
+    "name": "Keiji",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT029.png"
+  },
+  {
+    "id": "AOT030",
+    "name": "Abel",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT030.png"
+  },
+  {
+    "id": "AOT031",
+    "name": "Oruo Bozad",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT031.png"
+  },
+  {
+    "id": "AOT032",
+    "name": "Eld Jinn",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT032.png"
+  },
+  {
+    "id": "AOT033",
+    "name": "Gunther Schultz",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT033.png"
+  },
+  {
+    "id": "AOT034",
+    "name": "Petra Ral",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT034.png"
+  },
+  {
+    "id": "AOT035",
+    "name": "Ilse Langnar",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT035.png"
+  },
+  {
+    "id": "AOT036",
+    "name": "Keith Shadis",
+    "department": "Training Corps",
+    "avatar": "./avatars/AOT036.png"
+  },
+  {
+    "id": "AOT037",
+    "name": "Floch Forster",
+    "department": "Yeagerists",
+    "avatar": "./avatars/AOT037.png"
+  },
+  {
+    "id": "AOT038",
+    "name": "Marlo Freudenberg",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT038.png"
+  },
+  {
+    "id": "AOT039",
+    "name": "Louise",
+    "department": "Yeagerists",
+    "avatar": "./avatars/AOT039.png"
+  },
+  {
+    "id": "AOT040",
+    "name": "Holger",
+    "department": "Yeagerists",
+    "avatar": "./avatars/AOT040.png"
+  },
+  {
+    "id": "AOT041",
+    "name": "Wim",
+    "department": "Yeagerists",
+    "avatar": "./avatars/AOT041.png"
+  },
+  {
+    "id": "AOT042",
+    "name": "Sandra",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT042.png"
+  },
+  {
+    "id": "AOT043",
+    "name": "Gordon",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT043.png"
+  },
+  {
+    "id": "AOT044",
+    "name": "Harold",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT044.png"
+  },
+  {
+    "id": "AOT045",
+    "name": "Dieter Ness",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT045.png"
+  },
+  {
+    "id": "AOT046",
+    "name": "Luke Cis",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT046.png"
+  },
+  {
+    "id": "AOT047",
+    "name": "Lobov",
+    "department": "Survey Corps",
+    "avatar": "./avatars/AOT047.png"
+  },
+  {
+    "id": "AOT048",
+    "name": "Dot Pyxis",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT048.png"
+  },
+  {
+    "id": "AOT049",
+    "name": "Hannes",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT049.png"
+  },
+  {
+    "id": "AOT050",
+    "name": "Kitz Woermann",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT050.png"
+  },
+  {
+    "id": "AOT051",
+    "name": "Rico Brzenska",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT051.png"
+  },
+  {
+    "id": "AOT052",
+    "name": "Ian Dietrich",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT052.png"
+  },
+  {
+    "id": "AOT053",
+    "name": "Mitabi Jarnach",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT053.png"
+  },
+  {
+    "id": "AOT054",
+    "name": "Anka Rheinberger",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT054.png"
+  },
+  {
+    "id": "AOT055",
+    "name": "Gustav",
+    "department": "Garrison",
+    "avatar": "./avatars/AOT055.png"
+  },
+  {
+    "id": "AOT056",
+    "name": "Nile Dawk",
+    "department": "Military Police",
+    "avatar": "./avatars/AOT056.png"
+  },
+  {
+    "id": "AOT057",
+    "name": "Hitch Dreyse",
+    "department": "Military Police",
+    "avatar": "./avatars/AOT057.png"
+  },
+  {
+    "id": "AOT058",
+    "name": "Boris Feulner",
+    "department": "Military Police",
+    "avatar": "./avatars/AOT058.png"
+  },
+  {
+    "id": "AOT059",
+    "name": "Dennis Aiblinger",
+    "department": "Military Police",
+    "avatar": "./avatars/AOT059.png"
+  },
+  {
+    "id": "AOT060",
+    "name": "Kenny Ackerman",
+    "department": "Interior Military Police",
+    "avatar": "./avatars/AOT060.png"
+  },
+  {
+    "id": "AOT061",
+    "name": "Traute Caven",
+    "department": "Interior Military Police",
+    "avatar": "./avatars/AOT061.png"
+  },
+  {
+    "id": "AOT062",
+    "name": "Djel Sannes",
+    "department": "Interior Military Police",
+    "avatar": "./avatars/AOT062.png"
+  },
+  {
+    "id": "AOT063",
+    "name": "Ralph",
+    "department": "Interior Military Police",
+    "avatar": "./avatars/AOT063.png"
+  },
+  {
+    "id": "AOT064",
+    "name": "Roeg",
+    "department": "Military Police",
+    "avatar": "./avatars/AOT064.png"
+  },
+  {
+    "id": "AOT065",
+    "name": "Pastor Nick",
+    "department": "Order of the Walls",
+    "avatar": "./avatars/AOT065.png"
+  },
+  {
+    "id": "AOT066",
+    "name": "Rod Reiss",
+    "department": "Royal Government",
+    "avatar": "./avatars/AOT066.png"
+  },
+  {
+    "id": "AOT067",
+    "name": "Uri Reiss",
+    "department": "Royal Government",
+    "avatar": "./avatars/AOT067.png"
+  },
+  {
+    "id": "AOT068",
+    "name": "Frieda Reiss",
+    "department": "Royal Government",
+    "avatar": "./avatars/AOT068.png"
+  },
+  {
+    "id": "AOT069",
+    "name": "Grisha Yeager",
+    "department": "Eldian Restorationists",
+    "avatar": "./avatars/AOT069.png"
+  },
+  {
+    "id": "AOT070",
+    "name": "Carla Yeager",
+    "department": "Civilians",
+    "avatar": "./avatars/AOT070.png"
+  },
+  {
+    "id": "AOT071",
+    "name": "Faye Yeager",
+    "department": "Civilians",
+    "avatar": "./avatars/AOT071.png"
+  },
+  {
+    "id": "AOT072",
+    "name": "Dina Fritz",
+    "department": "Eldian Restorationists",
+    "avatar": "./avatars/AOT072.png"
+  },
+  {
+    "id": "AOT073",
+    "name": "Dimo Reeves",
+    "department": "Reeves Company",
+    "avatar": "./avatars/AOT073.png"
+  },
+  {
+    "id": "AOT074",
+    "name": "Flegel Reeves",
+    "department": "Reeves Company",
+    "avatar": "./avatars/AOT074.png"
+  },
+  {
+    "id": "AOT075",
+    "name": "Arthur Braus",
+    "department": "Civilians",
+    "avatar": "./avatars/AOT075.png"
+  },
+  {
+    "id": "AOT076",
+    "name": "Lisa Braus",
+    "department": "Civilians",
+    "avatar": "./avatars/AOT076.png"
+  },
+  {
+    "id": "AOT077",
+    "name": "Kaya",
+    "department": "Civilians",
+    "avatar": "./avatars/AOT077.png"
+  },
+  {
+    "id": "AOT078",
+    "name": "Roy",
+    "department": "Berg Newspapers",
+    "avatar": "./avatars/AOT078.png"
+  },
+  {
+    "id": "AOT079",
+    "name": "Peaure",
+    "department": "Berg Newspapers",
+    "avatar": "./avatars/AOT079.png"
+  },
+  {
+    "id": "AOT080",
+    "name": "Zeke Yeager",
+    "department": "Marley Warriors",
+    "avatar": "./avatars/AOT080.png"
+  },
+  {
+    "id": "AOT081",
+    "name": "Pieck Finger",
+    "department": "Marley Warriors",
+    "avatar": "./avatars/AOT081.png"
+  },
+  {
+    "id": "AOT082",
+    "name": "Porco Galliard",
+    "department": "Marley Warriors",
+    "avatar": "./avatars/AOT082.png"
+  },
+  {
+    "id": "AOT083",
+    "name": "Marcel Galliard",
+    "department": "Marley Warriors",
+    "avatar": "./avatars/AOT083.png"
+  },
+  {
+    "id": "AOT084",
+    "name": "Falco Grice",
+    "department": "Warrior Candidates",
+    "avatar": "./avatars/AOT084.png"
+  },
+  {
+    "id": "AOT085",
+    "name": "Gabi Braun",
+    "department": "Warrior Candidates",
+    "avatar": "./avatars/AOT085.png"
+  },
+  {
+    "id": "AOT086",
+    "name": "Colt Grice",
+    "department": "Warrior Candidates",
+    "avatar": "./avatars/AOT086.png"
+  },
+  {
+    "id": "AOT087",
+    "name": "Udo",
+    "department": "Warrior Candidates",
+    "avatar": "./avatars/AOT087.png"
+  },
+  {
+    "id": "AOT088",
+    "name": "Zofia",
+    "department": "Warrior Candidates",
+    "avatar": "./avatars/AOT088.png"
+  },
+  {
+    "id": "AOT089",
+    "name": "Tom Ksaver",
+    "department": "Marley Warriors",
+    "avatar": "./avatars/AOT089.png"
+  },
+  {
+    "id": "AOT090",
+    "name": "Theo Magath",
+    "department": "Marley Military",
+    "avatar": "./avatars/AOT090.png"
+  },
+  {
+    "id": "AOT091",
+    "name": "General Calvi",
+    "department": "Marley Military",
+    "avatar": "./avatars/AOT091.png"
+  },
+  {
+    "id": "AOT092",
+    "name": "Koslow",
+    "department": "Marley Military",
+    "avatar": "./avatars/AOT092.png"
+  },
+  {
+    "id": "AOT093",
+    "name": "Sergeant Major Gross",
+    "department": "Public Security Authorities",
+    "avatar": "./avatars/AOT093.png"
+  },
+  {
+    "id": "AOT094",
+    "name": "Yelena",
+    "department": "Anti-Marleyan Volunteers",
+    "avatar": "./avatars/AOT094.png"
+  },
+  {
+    "id": "AOT095",
+    "name": "Onyankopon",
+    "department": "Anti-Marleyan Volunteers",
+    "avatar": "./avatars/AOT095.png"
+  },
+  {
+    "id": "AOT096",
+    "name": "Nicolo",
+    "department": "Marley POW / Chef",
+    "avatar": "./avatars/AOT096.png"
+  },
+  {
+    "id": "AOT097",
+    "name": "Griez",
+    "department": "Anti-Marleyan Volunteers",
+    "avatar": "./avatars/AOT097.png"
+  },
+  {
+    "id": "AOT098",
+    "name": "Willy Tybur",
+    "department": "Tybur Family",
+    "avatar": "./avatars/AOT098.png"
+  },
+  {
+    "id": "AOT099",
+    "name": "Lara Tybur",
+    "department": "Tybur Family",
+    "avatar": "./avatars/AOT099.png"
+  },
+  {
+    "id": "AOT100",
+    "name": "Kiyomi Azumabito",
+    "department": "Hizuru",
+    "avatar": "./avatars/AOT100.png"
+  }
+]
