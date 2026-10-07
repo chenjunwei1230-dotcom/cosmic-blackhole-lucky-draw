@@ -6,6 +6,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { AccretionDiskShader } from './shaders.js';
 import { SupernovaEffect } from './supernova.js';
 import { SaturnRing } from './saturnRing.js';
+import { CosmicBackdrop } from './cosmicBackdrop.js';
 import { States } from '../core/fsm.js';
 
 export class CosmicScene {
@@ -18,7 +19,7 @@ export class CosmicScene {
     this.init();
     this.setupPostProcessing();
     this.buildBlackHole();
-    this.buildDistantStarfield();
+    this.cosmicBackdrop = new CosmicBackdrop(this.scene);
     this.saturnRing = new SaturnRing(this.scene);
     this.supernova = new SupernovaEffect(this.scene, this.camera);
     this.bindEvents();
@@ -26,7 +27,7 @@ export class CosmicScene {
 
   init() {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x020206);
+    this.scene.background = new THREE.Color(0x050714);
 
     this.camera = new THREE.PerspectiveCamera(
       45,
@@ -48,7 +49,7 @@ export class CosmicScene {
 
     this.renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setClearColor(0x020206, 1.0);
+    this.renderer.setClearColor(0x050714, 1.0);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.0;
@@ -208,9 +209,9 @@ export class CosmicScene {
       this.diskMaterial.uniforms.uCollapseProgress.value = this.collapseProgress;
     }
 
-    // 远景微弱旋转
-    if (this.starfield) {
-      this.starfield.rotation.z += delta * 0.002;
+    // Interstellar Nebula and Starfield update
+    if (this.cosmicBackdrop) {
+      this.cosmicBackdrop.update(delta, elapsedTime, this.collapseProgress);
     }
 
     // Accretion disk spin
