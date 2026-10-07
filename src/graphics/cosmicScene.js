@@ -224,10 +224,11 @@ export class CosmicScene {
       this.saturnRing.update(delta, this.currentState, this.collapseProgress);
     }
 
-    // Supernova fireworks update + refined bloom
+    // Megumin Explosion & Magic Circle update
+    this.supernova.setCollapseProgress(this.collapseProgress);
     this.supernova.update(delta);
     const boost = this.supernova.getBloomBoost();
-    this.bloomPass.strength = this.baseBloomStrength + boost * 0.25;
+    this.bloomPass.strength = this.baseBloomStrength + boost * 0.45;
 
     // 后处理渲染
     this.composer.render();

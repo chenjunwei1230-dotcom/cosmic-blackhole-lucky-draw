@@ -157,8 +157,8 @@ export class SaturnRing {
     ctx.closePath();
     ctx.clip();
 
-    if (img && badgeData.isImageLoaded) {
-      ctx.drawImage(img, centerX - avatarR, avatarY - avatarR, avatarR * 2, avatarR * 2);
+    if (activeImg && (badgeData.isImageLoaded || activeImg.complete)) {
+      ctx.drawImage(activeImg, centerX - avatarR, avatarY - avatarR, avatarR * 2, avatarR * 2);
     } else {
       // Procedural Initial Fallback
       const grad = ctx.createLinearGradient(centerX - avatarR, avatarY - avatarR, centerX + avatarR, avatarY + avatarR);
@@ -252,8 +252,18 @@ export class SaturnRing {
     for (let i = 0; i < this.badges.length; i++) {
       const b = this.badges[i];
 
-      // ── Winner Emergence Physics (Detonate and fly from singularity to camera) ──
+      // ── Winner Emergence Physics (Detonate explosion first, then emerge from singularity) ──
       if (b === this.winnerBadge && (isSupernova || isReveal)) {
+        if (isSupernova) {
+          this.winnerExplosionDelay = (this.winnerExplosionDelay || 0) + delta;
+          if (this.winnerExplosionDelay < 0.55) {
+            b.sprite.position.set(0, 0, 0);
+            b.sprite.scale.set(0.01, 0.01, 1.0);
+            b.sprite.material.opacity = 0.0;
+            continue;
+          }
+        }
+
         this.winnerProgress = Math.min(this.winnerProgress + delta * 1.5, 1.0);
         // Cinematic cubic-bezier expansion ease out
         const ease = 1 - Math.pow(1 - this.winnerProgress, 3.2);
@@ -339,6 +349,7 @@ export class SaturnRing {
       // Winner starts at singularity center (0, 0, 0)!
       this.winnerCurrentPos.set(0, 0, 0);
       this.winnerProgress = 0.0;
+      this.winnerExplosionDelay = 0.0;
       match.sprite.position.set(0, 0, 0);
       match.sprite.scale.set(0.01, 0.01, 1.0);
       match.sprite.material.opacity = 0.0;

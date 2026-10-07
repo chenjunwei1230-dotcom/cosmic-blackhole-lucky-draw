@@ -128,17 +128,29 @@ export class SoundEngine {
     burst.connect(burstFilter).connect(burstGain).connect(this.masterGain);
     burst.start(now);
 
+    // Anime magical explosion trigger chirp (Megumin sakuga transient)
+    const chirp = this.ctx.createOscillator();
+    chirp.type = 'sawtooth';
+    chirp.frequency.setValueAtTime(2800, now);
+    chirp.frequency.exponentialRampToValueAtTime(60, now + 0.08);
+    const chirpGain = this.ctx.createGain();
+    chirpGain.gain.setValueAtTime(0.45, now);
+    chirpGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    chirp.connect(chirpGain).connect(this.masterGain);
+    chirp.start(now);
+    chirp.stop(now + 0.15);
+
     // Sub impact: 80 Hz → 20 Hz sweep
     const impact = this.ctx.createOscillator();
     impact.type = 'sine';
-    impact.frequency.setValueAtTime(80, now);
-    impact.frequency.exponentialRampToValueAtTime(18, now + 0.6);
+    impact.frequency.setValueAtTime(95, now);
+    impact.frequency.exponentialRampToValueAtTime(18, now + 0.7);
     const impactGain = this.ctx.createGain();
-    impactGain.gain.setValueAtTime(0.55, now);
-    impactGain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+    impactGain.gain.setValueAtTime(0.65, now);
+    impactGain.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
     impact.connect(impactGain).connect(this.masterGain);
     impact.start(now);
-    impact.stop(now + 1.0);
+    impact.stop(now + 1.2);
 
     // Metallic ring
     const ring = this.ctx.createOscillator();
