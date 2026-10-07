@@ -11,67 +11,75 @@
   <div id="webgl-container"></div>
 
   <div id="stage-hud">
-    <!-- Top Center: Unified Luxury Floating Pill Bar -->
-    <header class="hud-navbar admin-control">
-      <div class="hud-brand">
+    <!-- Unified Luxury Broadcast Navigation Bar (Never Overlaps) -->
+    <header class="gala-top-bar admin-control">
+      <!-- Left: Event Branding & Live Status -->
+      <div class="top-brand-pill">
         <span class="brand-sparkle">✦</span>
         <span class="brand-title">CELESTIAL GALA</span>
         <span class="brand-year">2026</span>
-      </div>
-
-      <div class="nav-divider"></div>
-
-      <!-- Prize Tier Selector -->
-      <div class="tier-select-wrapper">
-        <div class="tier-dropdown-container">
-          <button id="tier-dropdown-btn" class="tier-current-btn" aria-label="Select Prize Tier">
-            <span id="current-tier-icon" class="tier-icon">🌟</span>
-            <span id="current-tier-name" class="tier-name">Grand Prize</span>
-            <span id="current-tier-quota" class="tier-quota-tag">1 Pax</span>
-            <span class="dropdown-arrow">▾</span>
-          </button>
-          <div id="tier-menu" class="tier-dropdown-menu"></div>
+        <div class="brand-status-divider"></div>
+        <div class="hud-status-badge">
+          <span class="status-pulse"></span>
+          <span id="hud-status" class="status-active">IDLE</span>
         </div>
       </div>
 
-      <div class="nav-divider"></div>
+      <!-- Center: Current Prize Tier & Batch Selection Dock -->
+      <div class="top-prize-dock">
+        <!-- Prize Tier Selector -->
+        <div class="tier-select-wrapper">
+          <div class="tier-dropdown-container">
+            <button id="tier-dropdown-btn" class="tier-current-btn" aria-label="Select Prize Tier">
+              <span id="current-tier-icon" class="tier-icon">🌟</span>
+              <span id="current-tier-name" class="tier-name">Grand Prize</span>
+              <span id="current-tier-quota" class="tier-quota-tag">1 Pax</span>
+              <span class="dropdown-arrow">▾</span>
+            </button>
+            <div id="tier-menu" class="tier-dropdown-menu"></div>
+          </div>
+        </div>
 
-      <!-- Batch Draw Selector -->
-      <div class="batch-select-wrapper">
-        <div class="batch-btn-group">
-          <button class="batch-btn active" data-count="1">x1</button>
-          <button class="batch-btn" data-count="5">x5</button>
-          <button class="batch-btn" data-count="10">x10</button>
+        <div class="nav-divider"></div>
+
+        <!-- Batch Draw Selector -->
+        <div class="batch-select-wrapper">
+          <div class="batch-btn-group">
+            <button class="batch-btn active" data-count="1">x1</button>
+            <button class="batch-btn" data-count="5">x5</button>
+            <button class="batch-btn" data-count="10">x10</button>
+          </div>
         </div>
       </div>
 
-      <div class="nav-divider"></div>
+      <!-- Right: Action Controls Dock -->
+      <div class="top-actions-dock">
+        <button id="btn-roster" class="top-dock-btn" title="View Candidate Roster & Photos (R)">
+          <span class="btn-icon">👥</span>
+          <span class="btn-text">ROSTER</span>
+          <span class="btn-count-badge" id="top-roster-count">100</span>
+        </button>
 
-      <!-- Status Indicator -->
-      <div class="hud-status-badge">
-        <span class="status-pulse"></span>
-        <span id="hud-status" class="status-active">IDLE</span>
+        <button id="btn-winners" class="top-dock-btn" title="View Winners History (W)">
+          <span class="btn-icon">🏆</span>
+          <span class="btn-text">WINNERS</span>
+          <span class="btn-count-badge" id="top-winners-count">0</span>
+        </button>
+
+        <button id="btn-settings" class="top-dock-btn" title="Open Prize & Gala Settings (S)">
+          <span class="btn-icon">⚙️</span>
+          <span class="btn-text">SETTINGS</span>
+        </button>
+
+        <button id="btn-clean" class="top-dock-btn icon-only" title="Toggle Clean Mode (C)">
+          <span class="btn-icon">👁</span>
+        </button>
+
+        <button id="btn-fullscreen" class="top-dock-btn icon-only" title="Toggle Fullscreen (F)">
+          <span class="btn-icon">⛶</span>
+        </button>
       </div>
     </header>
-
-    <!-- Top Right: View Controls -->
-    <div class="hud-quick-actions admin-control">
-      <button id="btn-roster" class="action-pill-btn" title="View Candidate Roster & Photos (R)">
-        <span class="pill-key">R</span> ROSTER (<span id="top-roster-count">100</span>)
-      </button>
-      <button id="btn-winners" class="action-pill-btn" title="View Winners History (W)">
-        <span class="pill-key">W</span> WINNERS (<span id="top-winners-count">0</span>)
-      </button>
-      <button id="btn-settings" class="action-pill-btn" title="Open Prize & Gala Settings (S)">
-        <span class="pill-key">S</span> SETTINGS
-      </button>
-      <button id="btn-clean" class="action-pill-btn" title="Toggle Clean Mode (C)">
-        <span class="pill-key">C</span> CLEAN VIEW
-      </button>
-      <button id="btn-fullscreen" class="action-pill-btn" title="Toggle Fullscreen (F)">
-        <span class="pill-key">F</span> FULLSCREEN
-      </button>
-    </div>
 
     <!-- Bottom Left: Pool Capacity & Data Controls -->
     <div class="hud-bottom-bar admin-control">

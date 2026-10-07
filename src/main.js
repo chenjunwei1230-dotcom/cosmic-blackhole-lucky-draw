@@ -342,7 +342,7 @@ window.addEventListener('DOMContentLoaded', () => {
     isCleanStage = !isCleanStage;
     document.body.classList.toggle('clean-stage-mode', isCleanStage);
     btnClean.classList.toggle('active', isCleanStage);
-    btnClean.textContent = isCleanStage ? '[C] NORMAL VIEW' : '[C] CLEAN VIEW';
+    btnClean.title = isCleanStage ? 'Normal View (C)' : 'Clean Mode (C)';
   }
 
   btnClean.addEventListener('click', toggleCleanStage);
