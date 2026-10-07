@@ -64,6 +64,14 @@ export class WinnerModal {
     this.contentContainer.className = 'winner-content-container';
     this.overlay.appendChild(this.contentContainer);
 
+    // ── Celebratory Confetti Canvas ──
+    this.confettiCanvas = document.createElement('canvas');
+    this.confettiCanvas.className = 'winner-confetti-canvas';
+    this.confettiCtx = this.confettiCanvas.getContext('2d');
+    this.overlay.appendChild(this.confettiCanvas);
+    this.confettiParticles = [];
+    this.confettiAnimId = null;
+
     // Click anywhere on overlay to dismiss
     this.overlay.style.cursor = 'pointer';
     this.overlay.addEventListener('click', () => {
@@ -90,7 +98,111 @@ export class WinnerModal {
 
     requestAnimationFrame(() => {
       this.overlay.classList.add('active');
+      this._startCelebratoryConfetti();
     });
+  }
+
+  // ── Celebratory Golden Confetti & Stardust Shower ────────────
+  _startCelebratoryConfetti() {
+    this._stopCelebratoryConfetti();
+    const w = (this.confettiCanvas.width = window.innerWidth);
+    const h = (this.confettiCanvas.height = window.innerHeight);
+
+    const colors = [
+      '#ffe885', '#ffd700', '#f5d061', '#e6b800', 
+      '#ffffff', '#fff3cc', '#e2c56a', '#c084fc'
+    ];
+
+    this.confettiParticles = [];
+    const count = 120;
+
+    for (let i = 0; i < count; i++) {
+      this.confettiParticles.push({
+        x: w * 0.5 + (Math.random() - 0.5) * w * 0.45,
+        y: h * 0.45 + (Math.random() - 0.5) * h * 0.2,
+        vx: (Math.random() - 0.5) * 16,
+        vy: -Math.random() * 14 - 4,
+        size: Math.random() * 9 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * Math.PI * 2,
+        vRot: (Math.random() - 0.5) * 0.22,
+        tilt: Math.random() * Math.PI,
+        vTilt: Math.random() * 0.12 + 0.05,
+        opacity: 1.0,
+        shape: Math.random() > 0.4 ? 'rect' : (Math.random() > 0.5 ? 'diamond' : 'circle'),
+        life: 0,
+        maxLife: Math.random() * 140 + 180
+      });
+    }
+
+    const animate = () => {
+      this.confettiCtx.clearRect(0, 0, this.confettiCanvas.width, this.confettiCanvas.height);
+      const gravity = 0.16;
+      const drag = 0.985;
+      let aliveCount = 0;
+
+      for (let i = 0; i < this.confettiParticles.length; i++) {
+        const p = this.confettiParticles[i];
+        p.life++;
+        if (p.life > p.maxLife) {
+          p.opacity -= 0.015;
+        }
+        if (p.opacity <= 0) continue;
+        aliveCount++;
+
+        p.vx *= drag;
+        p.vy = (p.vy + gravity) * drag;
+        p.x += p.vx + Math.sin(p.life * 0.06) * 0.9;
+        p.y += p.vy;
+        p.rotation += p.vRot;
+        p.tilt += p.vTilt;
+
+        const alpha = Math.max(0, p.opacity);
+        this.confettiCtx.save();
+        this.confettiCtx.translate(p.x, p.y);
+        this.confettiCtx.rotate(p.rotation);
+        this.confettiCtx.scale(1, Math.cos(p.tilt));
+
+        this.confettiCtx.globalAlpha = alpha;
+        this.confettiCtx.fillStyle = p.color;
+
+        if (p.shape === 'rect') {
+          this.confettiCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        } else if (p.shape === 'diamond') {
+          this.confettiCtx.beginPath();
+          this.confettiCtx.moveTo(0, -p.size / 2);
+          this.confettiCtx.lineTo(p.size / 2, 0);
+          this.confettiCtx.lineTo(0, p.size / 2);
+          this.confettiCtx.lineTo(-p.size / 2, 0);
+          this.confettiCtx.closePath();
+          this.confettiCtx.fill();
+        } else {
+          this.confettiCtx.beginPath();
+          this.confettiCtx.arc(0, 0, p.size / 3, 0, Math.PI * 2);
+          this.confettiCtx.fill();
+        }
+        this.confettiCtx.restore();
+      }
+
+      if (aliveCount > 0) {
+        this.confettiAnimId = requestAnimationFrame(animate);
+      } else {
+        this._stopCelebratoryConfetti();
+      }
+    };
+
+    this.confettiAnimId = requestAnimationFrame(animate);
+  }
+
+  _stopCelebratoryConfetti() {
+    if (this.confettiAnimId) {
+      cancelAnimationFrame(this.confettiAnimId);
+      this.confettiAnimId = null;
+    }
+    if (this.confettiCtx && this.confettiCanvas) {
+      this.confettiCtx.clearRect(0, 0, this.confettiCanvas.width, this.confettiCanvas.height);
+    }
+    this.confettiParticles = [];
   }
 
   // ── Single Hero 3D Card ──────────────────────────────────────
@@ -256,6 +368,7 @@ export class WinnerModal {
   // ── Hide ─────────────────────────────────────────────────────
   hide() {
     this.overlay.classList.remove('active');
+    this._stopCelebratoryConfetti();
     setTimeout(() => {
       if (!this.overlay.classList.contains('active')) {
         this.contentContainer.innerHTML = '';

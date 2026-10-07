@@ -101,8 +101,8 @@ export class SaturnRing {
     // Render initial procedural badge
     this._renderBadgeCanvas(badgeData, null);
 
-    // Asynchronously load attendee photo from local avatars
-    const avatarUrl = emp.avatar ? emp.avatar.replace(/^\./, '') : `/avatars/${emp.id}.png`;
+    // Asynchronously load attendee photo from local avatars (relative path friendly)
+    const avatarUrl = emp.avatar ? emp.avatar : `./avatars/${emp.id || emp.employeeId}.png`;
     const img = new Image();
     badgeData.img = null;
     img.referrerPolicy = 'no-referrer';
@@ -112,8 +112,8 @@ export class SaturnRing {
       this._renderBadgeCanvas(badgeData, img);
     };
     img.onerror = () => {
-      if (avatarUrl.endsWith('.png')) {
-        img.src = avatarUrl.replace('.png', '.jpg');
+      if (img.src.endsWith('.png')) {
+        img.src = img.src.replace('.png', '.jpg');
       }
     };
     img.src = avatarUrl;
@@ -160,18 +160,42 @@ export class SaturnRing {
     if (activeImg && (badgeData.isImageLoaded || activeImg.complete)) {
       ctx.drawImage(activeImg, centerX - avatarR, avatarY - avatarR, avatarR * 2, avatarR * 2);
     } else {
-      // Procedural Initial Fallback
-      const grad = ctx.createLinearGradient(centerX - avatarR, avatarY - avatarR, centerX + avatarR, avatarY + avatarR);
-      grad.addColorStop(0, '#f5d061');
-      grad.addColorStop(1, '#a67c1e');
-      ctx.fillStyle = grad;
+      // Celestial Medallion (Luxury Obsidian & Starlight Foil Treatment)
+      const radGrad = ctx.createRadialGradient(centerX - 15, avatarY - 20, 5, centerX, avatarY, avatarR);
+      radGrad.addColorStop(0, '#261b44');   // Deep Cosmic Violet core
+      radGrad.addColorStop(0.55, '#120d24'); // Nebula Obsidian
+      radGrad.addColorStop(1, '#060812');    // Deep Space Void rim
+      ctx.fillStyle = radGrad;
       ctx.fill();
 
-      ctx.fillStyle = '#060a14';
-      ctx.font = 'bold 56px "Segoe UI", sans-serif';
+      // Delicate concentric gold stardust rings
+      ctx.beginPath();
+      ctx.arc(centerX, avatarY, avatarR - 8, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(245, 208, 97, 0.25)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(centerX, avatarY, avatarR - 16, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(245, 208, 97, 0.12)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+
+      // Gold-leaf gradient for the initial letter
+      const textGrad = ctx.createLinearGradient(centerX, avatarY - 30, centerX, avatarY + 30);
+      textGrad.addColorStop(0, '#ffffff');
+      textGrad.addColorStop(0.35, '#ffea9f');
+      textGrad.addColorStop(0.75, '#f5d061');
+      textGrad.addColorStop(1, '#b3821a');
+      ctx.fillStyle = textGrad;
+
+      ctx.font = '800 52px "Space Grotesk", "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(emp.name ? emp.name.charAt(0) : '?', centerX, avatarY + 2);
+      ctx.shadowColor = 'rgba(245, 208, 97, 0.6)';
+      ctx.shadowBlur = 14;
+      ctx.fillText(emp.name ? emp.name.charAt(0).toUpperCase() : '?', centerX, avatarY + 2);
+      ctx.shadowBlur = 0;
     }
     ctx.restore();
 

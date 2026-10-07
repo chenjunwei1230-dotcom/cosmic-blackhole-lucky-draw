@@ -96,6 +96,31 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const btnSound   = document.getElementById('btn-sound');
+  const soundIcon  = document.getElementById('sound-icon');
+  const btnHotkeys = document.getElementById('btn-hotkeys');
+
+  function toggleAudio() {
+    const isMuted = audio.toggleMute();
+    if (soundIcon) soundIcon.textContent = isMuted ? '🔇' : '🔊';
+    if (btnSound) {
+      btnSound.title = isMuted ? 'Unmute Audio FX (M)' : 'Mute Audio FX (M)';
+      btnSound.classList.toggle('active', isMuted);
+    }
+    settingsDrawer.showToast(isMuted ? 'Audio FX Muted' : 'Audio FX Enabled', 'info');
+  }
+
+  if (btnSound) {
+    btnSound.addEventListener('click', toggleAudio);
+  }
+
+  if (btnHotkeys) {
+    btnHotkeys.addEventListener('click', () => {
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle('hotkeys');
+    });
+  }
+
   // ── HUD Helpers ──
   function refreshPoolHUD() {
     const avail = roster.getAvailableCount();
@@ -428,11 +453,18 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 4. History Drawer Shortcut [H]
-    if (e.code === 'KeyH') {
+    // Audio Mute Shortcut [M]
+    if (e.code === 'KeyM') {
       e.preventDefault();
-      if (settingsDrawer.isOpen) settingsDrawer.close();
-      historyDrawer.toggle();
+      toggleAudio();
+      return;
+    }
+
+    // Stage Hotkeys Cheatsheet Shortcut [?]
+    if ((e.code === 'Slash' && e.shiftKey) || e.code === 'KeyK') {
+      e.preventDefault();
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle('hotkeys');
       return;
     }
 

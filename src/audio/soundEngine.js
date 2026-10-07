@@ -6,6 +6,8 @@ export class SoundEngine {
     this.ctx = null;
     this.masterGain = null;
     this.activeNodes = [];
+    this.isMuted = false;
+    this.volume = 0.55;
   }
 
   // ── Lazy AudioContext init (must be called from user gesture) ──
@@ -13,11 +15,28 @@ export class SoundEngine {
     if (!this.ctx) {
       this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.value = 0.55;
+      this.masterGain.gain.value = this.isMuted ? 0 : this.volume;
       this.masterGain.connect(this.ctx.destination);
     }
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
+    }
+  }
+
+  toggleMute() {
+    this._ensureContext();
+    this.isMuted = !this.isMuted;
+    if (this.masterGain && this.ctx) {
+      this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : this.volume, this.ctx.currentTime);
+    }
+    return this.isMuted;
+  }
+
+  setMuted(muted) {
+    this._ensureContext();
+    this.isMuted = !!muted;
+    if (this.masterGain && this.ctx) {
+      this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : this.volume, this.ctx.currentTime);
     }
   }
 

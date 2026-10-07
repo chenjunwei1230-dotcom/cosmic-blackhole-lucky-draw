@@ -90,6 +90,9 @@ export class SettingsDrawer {
       <button class="settings-tab-btn" data-tab="branding">
         <span>✦ Gala Branding</span>
       </button>
+      <button class="settings-tab-btn" data-tab="hotkeys">
+        <span>⌨️ Hotkeys</span>
+      </button>
     `;
     this.tabBar.querySelectorAll('.settings-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -195,6 +198,8 @@ export class SettingsDrawer {
       this._renderTiersTab();
     } else if (this.activeTab === 'branding') {
       this._renderBrandingTab();
+    } else if (this.activeTab === 'hotkeys') {
+      this._renderHotkeysTab();
     }
   }
 
@@ -801,6 +806,48 @@ export class SettingsDrawer {
     });
 
     this.contentBody.appendChild(form);
+  }
+
+  // ══════════════════════════════════════════════════════════════════
+  // TAB 5: ⌨️ STAGE DIRECTOR HOTKEYS CHEATSHEET
+  // ══════════════════════════════════════════════════════════════════
+  _renderHotkeysTab() {
+    const container = document.createElement('div');
+    container.className = 'settings-hotkeys-tab-view';
+
+    const hotkeys = [
+      { key: 'SPACE / ENTER', action: 'Launch & Detonate Draw', desc: 'Trigger gravitational vortex, swallow attendees & ignite supernova reveal' },
+      { key: '1  2  3  4  5', action: 'Quick Prize Tier Switch', desc: 'Instantly select Grand Prize [1], 1st Prize [2], 2nd Prize [3], etc.' },
+      { key: 'B', action: 'Toggle Batch Count', desc: 'Cycle batch draw count between x1 (Single Hero), x5, and x10 attendees' },
+      { key: 'R', action: 'Candidate Roster', desc: 'Open 100-attendee candidate roster with photos, search, and CSV import' },
+      { key: 'W', action: 'Winners History', desc: 'View official winners records, undo/return winners to pool, and export CSV' },
+      { key: 'S', action: 'Prize & Gala Settings', desc: 'Configure prize quotas, descriptions, event title and year' },
+      { key: 'M', action: 'Toggle Audio FX', desc: 'Instantly mute or unmute audio synthesis for stage AV technician' },
+      { key: 'C', action: 'Clean Stage Mode', desc: 'Hide all HUD control pills for pure 100% immersive cinematic backdrop' },
+      { key: 'F', action: 'Fullscreen Mode', desc: 'Toggle stage fullscreen for 4K projector or LED video wall display' },
+      { key: 'ESC', action: 'Dismiss / Close', desc: 'Close winner modal, dismiss settings drawer, or close active dropdown' }
+    ];
+
+    container.innerHTML = `
+      <div class="settings-intro-box">
+        <span class="intro-spark">⌨️</span>
+        <span>Stage Director Hotkeys — Full keyboard control matrix for live event broadcasting and stage AV directors.</span>
+      </div>
+
+      <div class="hotkeys-grid">
+        ${hotkeys.map(h => `
+          <div class="hotkey-card">
+            <div class="hotkey-key-badge">${h.key}</div>
+            <div class="hotkey-details">
+              <div class="hotkey-action">${h.action}</div>
+              <div class="hotkey-desc">${h.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    this.contentBody.appendChild(container);
   }
 
   // ── CSV Export Helpers ──
