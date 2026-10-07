@@ -41,7 +41,12 @@ export class WinnerModal {
     this.overlay = null;
     this.flashEl = null;
     this.contentContainer = null;
+    this.onDismiss = null;
     this._buildDOM();
+  }
+
+  setOnDismiss(cb) {
+    this.onDismiss = cb;
   }
 
   _buildDOM() {
@@ -58,6 +63,14 @@ export class WinnerModal {
     this.contentContainer = document.createElement('div');
     this.contentContainer.className = 'winner-content-container';
     this.overlay.appendChild(this.contentContainer);
+
+    // Click anywhere on overlay to dismiss
+    this.overlay.style.cursor = 'pointer';
+    this.overlay.addEventListener('click', () => {
+      if (this.onDismiss) {
+        this.onDismiss();
+      }
+    });
 
     document.body.appendChild(this.overlay);
   }
@@ -83,8 +96,8 @@ export class WinnerModal {
   // ── Single Hero 3D Card ──────────────────────────────────────
   async _renderSingleHeroCard(winner, prizeTier) {
     const tier = prizeTier || winner.prize || {
-      name: '幸运大奖',
-      enName: 'LUCKY PRIZE',
+      name: 'Grand Prize',
+      enName: 'Grand Prize',
       icon: '🌟',
       color: '#ffd700'
     };
@@ -100,7 +113,7 @@ export class WinnerModal {
     // Glowing Prize Tier Badge
     const badge = document.createElement('div');
     badge.className = 'winner-tier-badge';
-    badge.innerHTML = `<span class="badge-icon">${tier.icon || '🌟'}</span> <span class="badge-title">${tier.name} · ${tier.enName || ''}</span>`;
+    badge.innerHTML = `<span class="badge-icon">${tier.icon || '🌟'}</span> <span class="badge-title">${tier.name}</span>`;
     card.appendChild(badge);
 
     // Avatar Container
@@ -156,8 +169,8 @@ export class WinnerModal {
   // ── Multi-Card Batch Draw Grid ───────────────────────────────
   async _renderBatchGrid(winners, prizeTier) {
     const tier = prizeTier || (winners[0] && winners[0].prize) || {
-      name: '幸运大奖',
-      enName: 'LUCKY DRAW',
+      name: 'Lucky Prize',
+      enName: 'Lucky Draw',
       icon: '🎁',
       color: '#ffd700'
     };
@@ -171,7 +184,7 @@ export class WinnerModal {
     header.innerHTML = `
       <div class="batch-title">
         <span class="batch-icon">${tier.icon || '🎁'}</span>
-        <span class="batch-tier-name">${tier.name} (${tier.enName || ''})</span>
+        <span class="batch-tier-name">${tier.name}</span>
         <span class="batch-count-pill">${winners.length} WINNERS</span>
       </div>
       <div class="batch-subtitle">CELESTIAL HARMONIC DRAW CONFIRMED</div>

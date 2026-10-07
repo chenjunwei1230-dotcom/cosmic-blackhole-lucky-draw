@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const tier = prizeManager.getCurrentTier();
     currentTierIcon.textContent = tier.icon;
     currentTierName.textContent = tier.name;
-    currentTierQuota.textContent = `${tier.quota}人`;
+    currentTierQuota.textContent = `${tier.quota} Pax`;
     refreshPoolHUD();
 
     // Sync menu active state
@@ -92,8 +92,8 @@ window.addEventListener('DOMContentLoaded', () => {
       item.innerHTML = `
         <span class="item-shortcut">[${tier.id}]</span>
         <span class="item-icon">${tier.icon}</span>
-        <span class="item-name">${tier.name} · ${tier.enName}</span>
-        <span class="item-quota">${tier.quota}人</span>
+        <span class="item-name">${tier.name}</span>
+        <span class="item-quota">${tier.quota} Pax</span>
       `;
       item.addEventListener('click', () => {
         if (fsm.getState() !== States.IDLE) return;
@@ -123,7 +123,7 @@ window.addEventListener('DOMContentLoaded', () => {
       switch (state) {
         case States.IDLE:
           hudStatus.className = 'status-active';
-          hudTip.textContent = 'PRESS [SPACE / ENTER] TO INITIATE DRAW';
+          hudTip.textContent = 'CLICK OR PRESS [SPACE] TO INITIATE DRAW';
           hudTip.style.opacity = '1';
           scene.setWinnerFocus(null);
           modal.hide();
@@ -132,11 +132,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
         case States.COLLAPSING:
           hudStatus.className = 'status-active';
-          hudTip.textContent = 'GRAVITATIONAL VORTEX · CANDIDATES SWALLOWED INTO BLACK HOLE...';
+          hudTip.textContent = 'GRAVITATIONAL VORTEX · SWALLOWING CANDIDATES...';
           audio.startCollapse();
           setTimeout(() => {
             if (fsm.getState() === States.COLLAPSING) {
-              hudTip.textContent = 'CRITICAL MASS REACHED [PRESS SPACE / ENTER TO DETONATE]';
+              hudTip.textContent = 'CRITICAL MASS REACHED [CLICK OR PRESS SPACE TO DETONATE]';
             }
           }, 2200);
           break;
@@ -170,7 +170,7 @@ window.addEventListener('DOMContentLoaded', () => {
           break;
 
         case States.REVEAL: {
-          hudTip.textContent = 'WINNER REVEALED [SPACE / ESC TO DISMISS]';
+          hudTip.textContent = 'WINNER REVEALED [CLICK OR PRESS SPACE TO CONTINUE]';
           if (selectedWinners && selectedWinners.length > 0) {
             modal.show(selectedWinners, prizeManager.getCurrentTier());
             audio.playReveal();
@@ -179,6 +179,53 @@ window.addEventListener('DOMContentLoaded', () => {
           break;
         }
       }
+    }
+  });
+
+  // ── Dismiss Modal on Click ──
+  modal.setOnDismiss(() => {
+    if (fsm.getState() === States.REVEAL) {
+      fsm.handleInput('DISMISS');
+    }
+  });
+
+  // ── Mouse Click Trigger Controls ──
+  function handleStageClick(e) {
+    // If clicking inside interactive controls, dropdowns, inputs, drawer, ignore
+    if (e.target.closest('button, input, select, .history-drawer, .history-floating-tab, .tier-dropdown-menu, .pool-glass-card')) {
+      return;
+    }
+
+    if (tierMenu.classList.contains('open')) {
+      tierMenu.classList.remove('open');
+      return;
+    }
+
+    if (historyDrawer.isOpen) {
+      historyDrawer.close();
+      return;
+    }
+
+    if (fsm.getState() === States.REVEAL) {
+      fsm.handleInput('DISMISS');
+    } else if (fsm.getState() === States.IDLE || fsm.getState() === States.COLLAPSING) {
+      fsm.handleInput('TOGGLE');
+    }
+  }
+
+  document.getElementById('webgl-container').addEventListener('click', handleStageClick);
+  document.getElementById('stage-hud').addEventListener('click', handleStageClick);
+
+  hudTip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (historyDrawer.isOpen) {
+      historyDrawer.close();
+      return;
+    }
+    if (fsm.getState() === States.REVEAL) {
+      fsm.handleInput('DISMISS');
+    } else if (fsm.getState() === States.IDLE || fsm.getState() === States.COLLAPSING) {
+      fsm.handleInput('TOGGLE');
     }
   });
 
@@ -323,14 +370,14 @@ window.addEventListener('DOMContentLoaded', () => {
   // ── Reset Winners ──
   btnReset.addEventListener('click', () => {
     if (fsm.getState() !== States.IDLE) return;
-    if (confirm('确认清空所有已产生的中奖记录？')) {
+    if (confirm('Are you sure you want to clear all winner records and restore the draw pool?')) {
       roster.resetWinners();
       refreshPoolHUD();
       historyDrawer.render();
       hudTip.textContent = 'ALL WINNERS CLEARED — POOL RESTORED';
       setTimeout(() => {
         if (fsm.getState() === States.IDLE) {
-          hudTip.textContent = 'PRESS [SPACE / ENTER] TO COLLAPSE';
+          hudTip.textContent = 'CLICK OR PRESS [SPACE] TO INITIATE DRAW';
         }
       }, 2000);
     }

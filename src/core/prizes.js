@@ -1,9 +1,8 @@
-// ─── Prize Tier Definitions and State Manager ─────────────────
 export const PRIZE_TIERS = [
   {
     id: 1,
     key: 'grand',
-    name: '特等奖',
+    name: 'Grand Prize',
     enName: 'Grand Prize',
     icon: '🌟',
     quota: 1,
@@ -14,7 +13,7 @@ export const PRIZE_TIERS = [
   {
     id: 2,
     key: 'first',
-    name: '一等奖',
+    name: '1st Prize',
     enName: '1st Prize',
     icon: '🥇',
     quota: 3,
@@ -25,7 +24,7 @@ export const PRIZE_TIERS = [
   {
     id: 3,
     key: 'second',
-    name: '二等奖',
+    name: '2nd Prize',
     enName: '2nd Prize',
     icon: '🥈',
     quota: 5,
@@ -36,7 +35,7 @@ export const PRIZE_TIERS = [
   {
     id: 4,
     key: 'third',
-    name: '三等奖',
+    name: '3rd Prize',
     enName: '3rd Prize',
     icon: '🥉',
     quota: 10,
@@ -47,7 +46,7 @@ export const PRIZE_TIERS = [
   {
     id: 5,
     key: 'lucky',
-    name: '幸运奖',
+    name: 'Lucky Prize',
     enName: 'Lucky Prize',
     icon: '🎁',
     quota: 20,

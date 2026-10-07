@@ -17,7 +17,7 @@ export class HistoryDrawer {
     this.toggleTab.title = 'Toggle Winner History (H)';
     this.toggleTab.innerHTML = `
       <span class="tab-icon">📜</span>
-      <span class="tab-text">LOG / 名录</span>
+      <span class="tab-text">AWARDS LOG</span>
       <span class="tab-badge" id="history-badge">0</span>
     `;
     this.toggleTab.addEventListener('click', () => this.toggle());
@@ -33,7 +33,7 @@ export class HistoryDrawer {
     header.className = 'drawer-header';
     header.innerHTML = `
       <div class="drawer-title-group">
-        <div class="drawer-title">CHRONO ARCHIVE / 获奖星谱</div>
+        <div class="drawer-title">AWARDS ARCHIVE</div>
         <div class="drawer-subtitle">QUANTUM SINGULARITY REPOSITORY</div>
       </div>
       <button class="drawer-close-btn" id="drawer-close" title="Close (H / ESC)">✕</button>
@@ -118,7 +118,7 @@ export class HistoryDrawer {
 
     // Filter Buttons
     this.filterBar.innerHTML = '';
-    const tiers = ['ALL', '特等奖', '一等奖', '二等奖', '三等奖', '幸运奖'];
+    const tiers = ['ALL', 'Grand Prize', '1st Prize', '2nd Prize', '3rd Prize', 'Lucky Prize'];
     tiers.forEach(tier => {
       const btn = document.createElement('button');
       btn.className = `filter-chip ${this.selectedTierFilter === tier ? 'active' : ''}`;
@@ -154,8 +154,8 @@ export class HistoryDrawer {
       const row = document.createElement('div');
       row.className = 'history-row';
 
-      const tier = winner.prize || { name: '标准奖', icon: '🎁', color: '#ffd700' };
-      const timeStr = winner.drawnAt ? new Date(winner.drawnAt).toLocaleTimeString('zh-CN', { hour12: false }) : '--:--:--';
+      const tier = winner.prize || { name: 'Prize', icon: '🎁', color: '#ffd700' };
+      const timeStr = winner.drawnAt ? new Date(winner.drawnAt).toLocaleTimeString('en-US', { hour12: false }) : '--:--:--';
       const empId = winner.employeeId || `EMP${String(winner.id).padStart(3, '0')}`;
 
       row.innerHTML = `
@@ -170,7 +170,7 @@ export class HistoryDrawer {
         </div>
         <div class="row-right">
           <span class="row-time">${timeStr}</span>
-          <button class="row-void-btn" title="Void winner & return to pool">作废 / VOID</button>
+          <button class="row-void-btn" title="Void winner & return to pool">VOID</button>
         </div>
       `;
 
@@ -178,7 +178,7 @@ export class HistoryDrawer {
       const voidBtn = row.querySelector('.row-void-btn');
       voidBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (confirm(`确认作废中奖者 [${winner.name} (${empId})] 并返回抽奖池？`)) {
+        if (confirm(`Void winner [${winner.name} (${empId})] and return to draw pool?`)) {
           this.roster.voidWinner(winner.id || winner.employeeId);
           this.onVoidWinner(winner);
           this.render();
@@ -193,17 +193,17 @@ export class HistoryDrawer {
   exportCSV() {
     const winners = this.roster.getAllWinners();
     if (winners.length === 0) {
-      alert('当前暂无中奖记录，无法导出！');
+      alert('No winners recorded yet. Unable to export.');
       return;
     }
 
     const headers = ['Prize', 'EmployeeID', 'Name', 'Department', 'DrawTime'];
     const rows = winners.map(w => {
-      const prizeName = w.prize ? `${w.prize.name} (${w.prize.enName || ''})` : 'Lucky Draw';
+      const prizeName = w.prize ? w.prize.name : 'Lucky Prize';
       const empId = w.employeeId || `EMP${String(w.id).padStart(3, '0')}`;
       const name = `"${(w.name || '').replace(/"/g, '""')}"`;
       const dept = `"${(w.department || '').replace(/"/g, '""')}"`;
-      const time = w.drawnAt ? new Date(w.drawnAt).toLocaleString('zh-CN') : '';
+      const time = w.drawnAt ? new Date(w.drawnAt).toLocaleString('en-US') : '';
       return [prizeName, empId, name, dept, time].join(',');
     });
 
