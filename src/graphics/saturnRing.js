@@ -252,44 +252,63 @@ export class SaturnRing {
     for (let i = 0; i < this.badges.length; i++) {
       const b = this.badges[i];
 
-      // ── Winner Emergence Physics (Detach and fly towards camera) ──
+      // ── Winner Emergence Physics (Detonate and fly from singularity to camera) ──
       if (b === this.winnerBadge && (isSupernova || isReveal)) {
-        this.winnerProgress = Math.min(this.winnerProgress + delta * 2.0, 1.0);
-        const ease = 1 - Math.pow(1 - this.winnerProgress, 3); // cubic ease out
+        this.winnerProgress = Math.min(this.winnerProgress + delta * 1.5, 1.0);
+        // Cinematic cubic-bezier expansion ease out
+        const ease = 1 - Math.pow(1 - this.winnerProgress, 3.2);
 
-        // Animate from center forward directly to front screen view
+        // Animate from singularity (0, 0, 0) forward to front screen view (0, 0.2, 4.2)
         b.sprite.position.lerpVectors(this.winnerCurrentPos, this.winnerTargetPos, ease);
-        const targetScale = b.baseScale * (1.0 + ease * 3.6);
+        const targetScale = b.baseScale * (0.1 + ease * 1.5);
         b.sprite.scale.set(targetScale, targetScale * 1.06, 1.0);
-        b.sprite.material.opacity = 1.0;
+        b.sprite.material.opacity = Math.min(this.winnerProgress * 3.0, 1.0);
         continue;
       }
 
-      // ── Normal Face-on Circular Vortex Motion ──
-      let targetRadiusRatio = 1.0;
-      let spiralAngleOffset = 0.0;
+      // ── Candidates Vortex Suction Physics into Black Hole ──
+      let targetRadius = b.baseRadius;
+      let targetOpacity = 1.0;
+      let targetScaleMult = 1.0;
+      let spiralSpin = 0.0;
 
-      if (isCollapsing) {
-        // Contract along smooth Archimedean spiral directly into event horizon
-        targetRadiusRatio = 1.0 - Math.min(collapseProgress * 0.72, 0.76);
-        spiralAngleOffset = collapseProgress * Math.PI * 3.0;
-      } else if (isStopping) {
-        targetRadiusRatio = 0.30;
-        spiralAngleOffset = Math.PI * 3.0;
+      if (isCollapsing || isStopping) {
+        // Logarithmic gravitational plunge into the singularity
+        const suctionProgress = Math.min(collapseProgress, 1.0);
+        const plunge = Math.pow(suctionProgress, 1.5);
+        targetRadius = b.baseRadius * (1.0 - plunge * 0.98);
+
+        // Relativistic orbital acceleration (spin increases as radius drops)
+        spiralSpin = Math.pow(suctionProgress, 1.8) * Math.PI * 10.0;
+
+        // Gravitational tidal fade as it crosses event horizon (r <= 1.15)
+        if (targetRadius <= 1.15) {
+          const depth = Math.max(0.0, (targetRadius - 0.1) / 1.05);
+          targetScaleMult = Math.pow(depth, 1.3);
+          targetOpacity = Math.pow(depth, 1.6);
+        }
+
+        if (suctionProgress >= 0.92) {
+          targetOpacity = 0.0;
+          targetScaleMult = 0.0;
+        }
       } else if (isSupernova) {
-        targetRadiusRatio = 0.25;
+        // Swallowed inside singularity during supernova burst
+        targetOpacity = 0.0;
+        targetScaleMult = 0.0;
+        targetRadius = 0.05;
       } else if (isReveal) {
-        targetRadiusRatio = 1.0;
+        // After winner is crowned, ambient background attendees softly restore faint presence
+        targetOpacity = 0.20;
+        targetScaleMult = 1.0;
+        targetRadius = b.baseRadius;
       }
 
-      // Smooth radius interpolation
-      const targetRadius = b.baseRadius * targetRadiusRatio;
-      b.currentRadius += (targetRadius - b.currentRadius) * Math.min(delta * 3.5, 0.3);
-
-      // Swirl angle progresses at differential speed in the X-Y plane
+      // Smooth radius and angular integration
+      b.currentRadius += (targetRadius - b.currentRadius) * Math.min(delta * 4.5, 0.4);
       b.currentAngle += b.speed * speedMult * delta;
 
-      const renderAngle = b.currentAngle + spiralAngleOffset;
+      const renderAngle = b.currentAngle + spiralSpin;
 
       // 3D Saturn Ring orbital coordinates (X-Z plane)
       const x = Math.cos(renderAngle) * b.currentRadius;
@@ -297,17 +316,8 @@ export class SaturnRing {
       const z = Math.sin(renderAngle) * b.currentRadius;
 
       b.sprite.position.set(x, y, z);
-
-      // Scale modulation as it approaches singularity
-      const scaleFactor = isCollapsing ? Math.max(b.currentRadius / b.baseRadius, 0.6) : 1.0;
-      b.sprite.scale.set(b.baseScale * scaleFactor, b.baseScale * 1.06 * scaleFactor, 1.0);
-
-      // In supernova / reveal, softly dim background candidates so winner shines
-      if (isSupernova || isReveal) {
-        b.sprite.material.opacity = THREE.MathUtils.lerp(b.sprite.material.opacity, 0.20, 0.08);
-      } else {
-        b.sprite.material.opacity = THREE.MathUtils.lerp(b.sprite.material.opacity, 1.0, 0.08);
-      }
+      b.sprite.scale.set(b.baseScale * targetScaleMult, b.baseScale * 1.06 * targetScaleMult, 1.0);
+      b.sprite.material.opacity = THREE.MathUtils.lerp(b.sprite.material.opacity, targetOpacity, 0.12);
     }
   }
 
@@ -326,8 +336,12 @@ export class SaturnRing {
     if (match) {
       this.winnerBadge = match;
       match.isWinner = true;
-      this.winnerCurrentPos.copy(match.sprite.position);
+      // Winner starts at singularity center (0, 0, 0)!
+      this.winnerCurrentPos.set(0, 0, 0);
       this.winnerProgress = 0.0;
+      match.sprite.position.set(0, 0, 0);
+      match.sprite.scale.set(0.01, 0.01, 1.0);
+      match.sprite.material.opacity = 0.0;
       this._renderBadgeCanvas(match, null);
     }
   }

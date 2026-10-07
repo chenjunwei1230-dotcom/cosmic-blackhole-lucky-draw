@@ -3,7 +3,6 @@ import { Roster } from './core/roster.js';
 import { PrizeManager, PRIZE_TIERS } from './core/prizes.js';
 import { CosmicScene } from './graphics/cosmicScene.js';
 import { WinnerModal } from './ui/winnerModal.js';
-import { CandidateRoller } from './ui/candidateRoller.js';
 import { HistoryDrawer } from './ui/historyDrawer.js';
 import { SoundEngine } from './audio/soundEngine.js';
 
@@ -37,7 +36,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const roster       = new Roster();
   const prizeManager = new PrizeManager();
   const modal        = new WinnerModal();
-  const roller       = new CandidateRoller({ roster });
   const audio        = new SoundEngine();
 
   let selectedWinners = [];
@@ -125,24 +123,22 @@ window.addEventListener('DOMContentLoaded', () => {
       switch (state) {
         case States.IDLE:
           hudStatus.className = 'status-active';
-          hudTip.textContent = 'PRESS [SPACE / ENTER] TO COLLAPSE';
+          hudTip.textContent = 'PRESS [SPACE / ENTER] TO INITIATE DRAW';
           hudTip.style.opacity = '1';
           scene.setWinnerFocus(null);
-          roller.hide(true);
           modal.hide();
           refreshPoolHUD();
           break;
 
         case States.COLLAPSING:
           hudStatus.className = 'status-active';
-          hudTip.textContent = 'GRAVITATIONAL SURGE (LOCKING 2.5s...)';
+          hudTip.textContent = 'GRAVITATIONAL VORTEX · CANDIDATES SWALLOWED INTO BLACK HOLE...';
           audio.startCollapse();
-          roller.start(prizeManager.getCurrentTier(), prizeManager.getDrawCount());
           setTimeout(() => {
             if (fsm.getState() === States.COLLAPSING) {
-              hudTip.textContent = 'READY TO STOP [PRESS SPACE / ENTER]';
+              hudTip.textContent = 'CRITICAL MASS REACHED [PRESS SPACE / ENTER TO DETONATE]';
             }
-          }, 2500);
+          }, 2200);
           break;
 
         case States.STOPPING: {
@@ -153,30 +149,28 @@ window.addEventListener('DOMContentLoaded', () => {
           if (!selectedWinners || selectedWinners.length === 0) {
             hudTip.textContent = '⚠ POOL EXHAUSTED — IMPORT NEW ROSTER OR RESET';
             audio.fadeOutCollapse();
-            roller.hide(true);
             setTimeout(() => fsm.transitionTo(States.IDLE), 200);
             return;
           }
-          hudTip.textContent = `DE-ACCELERATING [DRAWING ${selectedWinners.length}]...`;
+
+          // Lock in the winner IMMEDIATELY so 3D emergence matches modal 100%
+          const winnerId = selectedWinners[0].id || selectedWinners[0].employeeId;
+          scene.setWinnerFocus(winnerId);
+
+          hudTip.textContent = `SINGULARITY AT PEAK TENSION · DETONATION IMMINENT...`;
           audio.fadeOutCollapse();
-          roller.stop(selectedWinners);
           break;
         }
 
         case States.SUPERNOVA:
-          hudTip.textContent = 'SUPERNOVA BLAST!';
-          roller.hide();
-          if (selectedWinners && selectedWinners.length === 1) {
-            scene.setWinnerFocus(selectedWinners[0].id || selectedWinners[0].employeeId);
-          }
+          hudTip.textContent = '✦ RELATIVISTIC SUPERNOVA EXPLOSION ✦';
           scene.triggerSupernova();
           modal.triggerFlash();
           audio.playSupernova();
           break;
 
         case States.REVEAL: {
-          hudTip.textContent = 'WINNERS REVEALED [SPACE / ESC TO DISMISS]';
-          roller.hide(true);
+          hudTip.textContent = 'WINNER REVEALED [SPACE / ESC TO DISMISS]';
           if (selectedWinners && selectedWinners.length > 0) {
             modal.show(selectedWinners, prizeManager.getCurrentTier());
             audio.playReveal();

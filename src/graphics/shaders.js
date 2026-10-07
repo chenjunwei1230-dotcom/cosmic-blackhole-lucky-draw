@@ -1,39 +1,63 @@
 export const AccretionDiskShader = {
   vertexShader: `
-    varying vec2 vUv;
+    varying vec2 vPos;
+    varying vec3 vWorldPos;
     void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      vPos = position.xy;
+      vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+      vWorldPos = worldPosition.xyz;
+      gl_Position = projectionMatrix * viewMatrix * worldPosition;
     }
   `,
   fragmentShader: `
     uniform float uTime;
-    varying vec2 vUv;
+    uniform float uInnerRadius;
+    uniform float uOuterRadius;
+    uniform float uCollapseProgress;
+    varying vec2 vPos;
+    varying vec3 vWorldPos;
 
     void main() {
-      vec2 center = vUv - vec2(0.5);
-      float dist = length(center) * 2.0;
+      float r = length(vPos);
+      if (r < uInnerRadius || r > uOuterRadius) discard;
 
-      // 核心视界纯黑镂空 (dist < 0.36)
-      if (dist < 0.36 || dist > 0.98) discard;
+      float normR = (r - uInnerRadius) / (uOuterRadius - uInnerRadius);
+      float angle = atan(vPos.y, vPos.x);
 
-      float angle = atan(center.y, center.x);
-      
-      // 等离子双螺旋流动
-      float spiral = sin(angle * 5.0 - uTime * 3.5 + dist * 12.0);
-      float edgeFade = smoothstep(0.36, 0.48, dist) * (1.0 - smoothstep(0.75, 0.98, dist));
-      float alpha = edgeFade * (0.6 + 0.4 * spiral);
+      // Relativistic Keplerian differential flow (inner orbits rotate faster)
+      float omega = 2.2 / sqrt(normR + 0.2);
+      float spinFactor = 1.0 + uCollapseProgress * 4.0;
+      float rotAngle = angle - uTime * omega * 0.4 * spinFactor;
 
-      // Luxury Champagne Gold & Deep Void event horizon
-      vec3 champagne = vec3(0.92, 0.78, 0.38);
-      vec3 deepVoid  = vec3(0.06, 0.14, 0.26);
-      vec3 color = mix(champagne, deepVoid, smoothstep(0.40, 0.88, dist));
+      // Relativistic multi-harmonic plasma turbulence
+      float spiral1 = sin(rotAngle * 5.0 + normR * 12.0);
+      float spiral2 = cos(rotAngle * 10.0 - normR * 18.0 + uTime * 1.5);
+      float plasma = 0.65 + 0.25 * spiral1 + 0.10 * spiral2;
 
-      // Subtle photon ring inner rim
-      float innerRim = pow(1.0 - smoothstep(0.36, 0.44, dist), 2.0);
-      color += vec3(0.4, 0.3, 0.1) * innerRim;
+      // Relativistic Doppler beaming (approaching left flank shines brighter)
+      float doppler = 1.0 + 0.32 * sin(angle + 0.4);
 
-      gl_FragColor = vec4(color, clamp(alpha * 0.65, 0.0, 0.75));
+      // Intense blazing photon ring at the innermost stable orbit
+      float photonRing = pow(1.0 - smoothstep(0.0, 0.10, normR), 3.0) * (2.4 + uCollapseProgress * 2.0);
+
+      // Radial fade: crisp inner event horizon cut, soft outer stellar fade
+      float radialFade = smoothstep(0.0, 0.04, normR) * (1.0 - smoothstep(0.68, 1.0, normR));
+
+      // Luxury palette: incandescent white-gold, champagne gold, deep amber, stellar void
+      vec3 coreWhiteGold = vec3(1.6, 1.5, 1.2);
+      vec3 champagneGold = vec3(0.96, 0.82, 0.42);
+      vec3 deepAmber     = vec3(0.72, 0.38, 0.12);
+      vec3 cosmicVoid    = vec3(0.08, 0.04, 0.16);
+
+      vec3 color = mix(champagneGold, deepAmber, smoothstep(0.12, 0.60, normR));
+      color = mix(color, cosmicVoid, smoothstep(0.60, 1.0, normR));
+      color += coreWhiteGold * photonRing;
+
+      // Color flaring during collapse suction
+      color *= (1.0 + uCollapseProgress * 1.5);
+
+      float alpha = radialFade * plasma * doppler * clamp(0.75 + uCollapseProgress * 0.25, 0.0, 1.0);
+      gl_FragColor = vec4(color * doppler, clamp(alpha * 0.85, 0.0, 0.95));
     }
   `
 };
