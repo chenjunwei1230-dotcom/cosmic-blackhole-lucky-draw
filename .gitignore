@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Environment
+.env
+.env.local
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary test captures
+*screenshot*.png
+draw_*.png
+batch_*.png
+roller_*.png
+winner_*.png
+saturn_*.png
+swirling_*.png
+test_*.cjs
+capture_*.cjs
+download_avatars.cjs
+actual_*.png
+hardware_*.png

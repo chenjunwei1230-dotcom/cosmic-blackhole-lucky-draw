@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Cosmic Black Hole Gala - Stage Display</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div id="webgl-container"></div>
+
+  <div id="stage-hud">
+    <!-- Top Center: Unified Luxury Floating Pill Bar -->
+    <header class="hud-navbar admin-control">
+      <div class="hud-brand">
+        <span class="brand-sparkle">✦</span>
+        <span class="brand-title">CELESTIAL GALA</span>
+        <span class="brand-year">2026</span>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <!-- Prize Tier Selector -->
+      <div class="tier-select-wrapper">
+        <div class="tier-dropdown-container">
+          <button id="tier-dropdown-btn" class="tier-current-btn" aria-label="Select Prize Tier">
+            <span id="current-tier-icon" class="tier-icon">🌟</span>
+            <span id="current-tier-name" class="tier-name">特等奖</span>
+            <span id="current-tier-quota" class="tier-quota-tag">1人</span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div id="tier-menu" class="tier-dropdown-menu"></div>
+        </div>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <!-- Batch Draw Selector -->
+      <div class="batch-select-wrapper">
+        <div class="batch-btn-group">
+          <button class="batch-btn active" data-count="1">x1</button>
+          <button class="batch-btn" data-count="5">x5</button>
+          <button class="batch-btn" data-count="10">x10</button>
+        </div>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <!-- Status Indicator -->
+      <div class="hud-status-badge">
+        <span class="status-pulse"></span>
+        <span id="hud-status" class="status-active">IDLE</span>
+      </div>
+    </header>
+
+    <!-- Top Right: View Controls -->
+    <div class="hud-quick-actions admin-control">
+      <button id="btn-clean" class="action-pill-btn" title="Toggle Clean Mode (C)">
+        <span class="pill-key">C</span> CLEAN VIEW
+      </button>
+      <button id="btn-fullscreen" class="action-pill-btn" title="Toggle Fullscreen (F)">
+        <span class="pill-key">F</span> FULLSCREEN
+      </button>
+    </div>
+
+    <!-- Bottom Left: Pool Capacity & Data Controls -->
+    <div class="hud-bottom-bar admin-control">
+      <div class="pool-glass-card">
+        <div class="pool-meta">
+          <span class="meta-label">CANDIDATE POOL</span>
+          <span class="meta-val"><strong id="hud-available">100</strong> / <span id="hud-total">100</span></span>
+        </div>
+        <div class="pool-actions">
+          <button id="btn-import" class="glass-btn">IMPORT</button>
+          <button id="btn-reset" class="glass-btn glass-btn-muted">RESET</button>
+        </div>
+      </div>
+      <input type="file" id="roster-import" accept=".json,.csv,.txt" style="display:none" />
+    </div>
+
+    <!-- Bottom Right: Winners Stat Pill -->
+    <div class="hud-stats-bottom">
+      <div class="stats-glass-pill">
+        <span class="stats-label">AWARDS</span>
+        <span class="stats-num" id="hud-winner-count">0</span>
+        <span class="stats-sep">/</span>
+        <span class="stats-sub" id="hud-tier-drawn-count">TIER: 0</span>
+      </div>
+    </div>
+
+    <!-- Hidden elements kept for backward compatibility with main.js -->
+    <div style="display:none">
+      <span id="hud-count">100</span>
+    </div>
+
+    <!-- Bottom Center: Cinematic Atmospheric Prompt -->
+    <div class="hud-center-tip" id="hud-tip">PRESS [SPACE / ENTER] TO INITIATE DRAW</div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
