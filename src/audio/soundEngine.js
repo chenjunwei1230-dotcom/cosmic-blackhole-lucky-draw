@@ -150,6 +150,25 @@ export class SoundEngine {
     ring.connect(ringGain).connect(this.masterGain);
     ring.start(now);
     ring.stop(now + 0.6);
+
+    // Sizzling fireworks crackles
+    const crackleLen = this.ctx.sampleRate * 1.4;
+    const crackleBuf = this.ctx.createBuffer(1, crackleLen, this.ctx.sampleRate);
+    const cd = crackleBuf.getChannelData(0);
+    for (let i = 0; i < crackleLen; i++) {
+      const prob = Math.random();
+      cd[i] = (prob > 0.98 ? (Math.random() * 2 - 1) : 0) * Math.exp(-i / (this.ctx.sampleRate * 0.8));
+    }
+    const crackle = this.ctx.createBufferSource();
+    crackle.buffer = crackleBuf;
+    const crackleFilter = this.ctx.createBiquadFilter();
+    crackleFilter.type = 'highpass';
+    crackleFilter.frequency.value = 2500;
+    const crackleGain = this.ctx.createGain();
+    crackleGain.gain.setValueAtTime(0.35, now + 0.12);
+    crackleGain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+    crackle.connect(crackleFilter).connect(crackleGain).connect(this.masterGain);
+    crackle.start(now + 0.12);
   }
 
   // ── Reveal: ascending bell chime ─────────────────────────────

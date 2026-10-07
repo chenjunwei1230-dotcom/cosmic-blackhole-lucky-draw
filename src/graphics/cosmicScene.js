@@ -224,10 +224,10 @@ export class CosmicScene {
       this.saturnRing.update(delta, this.currentState, this.collapseProgress);
     }
 
-    // Supernova effect update + dynamic bloom boost
+    // Supernova fireworks update + refined bloom
     this.supernova.update(delta);
     const boost = this.supernova.getBloomBoost();
-    this.bloomPass.strength = this.baseBloomStrength + boost * 0.9;
+    this.bloomPass.strength = this.baseBloomStrength + boost * 0.25;
 
     // 后处理渲染
     this.composer.render();
