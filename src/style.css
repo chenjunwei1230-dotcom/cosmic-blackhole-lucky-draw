@@ -1191,10 +1191,53 @@ body.clean-stage-mode .history-floating-tab {
 /* ══════════════════════════════════════════════════════════════════
    FLOATING HISTORY DRAWER & SIDEBAR
    ══════════════════════════════════════════════════════════════════ */
+.settings-floating-tab {
+  position: fixed;
+  right: 0;
+  top: 38%;
+  transform: translateY(-50%);
+  background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-gold);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  padding: 0.85rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  z-index: 40;
+  pointer-events: auto;
+  box-shadow: -6px 0 25px rgba(0, 0, 0, 0.7);
+  transition: all 0.25s var(--ease-cinematic);
+  font-family: inherit;
+}
+
+.settings-floating-tab:hover, .settings-floating-tab.active {
+  background: rgba(22, 28, 48, 0.95);
+  border-color: var(--border-gold-bright);
+  box-shadow: -6px 0 30px rgba(245, 208, 97, 0.25);
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.settings-floating-tab .tab-icon {
+  font-size: 1.05rem;
+}
+
+.settings-floating-tab .tab-text {
+  writing-mode: vertical-rl;
+  color: var(--accent-gold);
+  font-size: 0.65rem;
+  letter-spacing: 0.18rem;
+  font-weight: 700;
+}
+
 .history-floating-tab {
   position: fixed;
   right: 0;
-  top: 48%;
+  top: 56%;
   transform: translateY(-50%);
   background: var(--bg-surface);
   backdrop-filter: blur(16px);
@@ -1479,4 +1522,451 @@ body.clean-stage-mode .history-floating-tab {
   background: rgba(245, 208, 97, 0.2);
   border-color: var(--border-gold-bright);
   box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SETTINGS DRAWER & CONFIGURATION PANEL
+   ══════════════════════════════════════════════════════════════════ */
+.settings-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 520px;
+  max-width: 92vw;
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(14, 18, 32, 0.98), rgba(7, 9, 18, 0.99));
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-left: 1px solid var(--border-gold);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.95);
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.4s var(--ease-cinematic);
+}
+
+.settings-drawer.open {
+  transform: translateX(0);
+}
+
+.settings-tabs-bar {
+  display: flex;
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid var(--border-glass);
+  padding: 0.4rem 1.4rem;
+  gap: 0.4rem;
+}
+
+.settings-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04rem;
+  padding: 0.55rem 0.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-cinematic);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.settings-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.settings-tab-btn.active {
+  background: rgba(245, 208, 97, 0.14);
+  border-color: var(--border-gold);
+  color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(245, 208, 97, 0.15);
+}
+
+.settings-content-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.2rem 1.4rem;
+}
+
+/* Tier Config Card */
+.settings-tiers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tier-config-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: all 0.22s ease;
+  cursor: pointer;
+}
+
+.tier-config-card:hover {
+  background: rgba(245, 208, 97, 0.04);
+  border-color: var(--border-gold-subtle);
+}
+
+.tier-config-card.selected {
+  background: rgba(245, 208, 97, 0.08);
+  border-color: var(--border-gold);
+  box-shadow: 0 0 16px rgba(245, 208, 97, 0.12);
+}
+
+.tier-card-left {
+  padding-top: 0.35rem;
+}
+
+.tier-radio-label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tier-radio-label input {
+  display: none;
+}
+
+.radio-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border-glass);
+  display: inline-block;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tier-radio-label input:checked + .radio-indicator {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold);
+  box-shadow: 0 0 8px var(--accent-gold);
+}
+
+.tier-card-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tier-card-row1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tier-icon-display {
+  font-size: 1.15rem;
+}
+
+.tier-name-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  padding: 0.35rem 0.55rem;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.tier-name-input:focus {
+  border-color: var(--accent-gold);
+  outline: none;
+}
+
+.tier-quota-box {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-glass);
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+}
+
+.input-mini-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.tier-quota-input {
+  width: 44px;
+  background: transparent;
+  border: none;
+  color: var(--accent-gold);
+  font-size: 0.82rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.tier-quota-input:focus {
+  outline: none;
+}
+
+.quota-unit {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.tier-progress-tag {
+  font-size: 0.65rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.tier-progress-tag.filled {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.tier-card-row2 {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.field-desc-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.tier-prize-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  padding: 0.3rem 0.55rem;
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-family: inherit;
+}
+
+.tier-prize-input:focus {
+  border-color: var(--accent-gold);
+  outline: none;
+  color: #fff;
+}
+
+.tier-delete-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.tier-delete-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.tier-add-bar {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.add-tier-btn, .reset-tiers-btn {
+  flex: 1;
+  padding: 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04rem;
+  border-radius: 8px;
+  background: rgba(245, 208, 97, 0.08);
+  border: 1px dashed var(--border-gold);
+  color: var(--accent-gold);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.add-tier-btn:hover {
+  background: rgba(245, 208, 97, 0.18);
+  border-style: solid;
+  box-shadow: 0 0 14px rgba(245, 208, 97, 0.2);
+}
+
+.reset-tiers-btn {
+  flex: 0.6;
+  border-color: var(--border-glass);
+  color: var(--text-muted);
+}
+
+.reset-tiers-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+/* Settings Form (Branding Tab) */
+.settings-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.settings-intro-box {
+  background: rgba(245, 208, 97, 0.06);
+  border: 1px solid var(--border-gold-subtle);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.intro-spark {
+  color: var(--accent-gold);
+  font-size: 0.95rem;
+}
+
+.settings-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.04rem;
+}
+
+.field-input {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  color: #fff;
+  font-size: 0.82rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.field-input:focus {
+  border-color: var(--accent-gold);
+  outline: none;
+}
+
+.field-hint {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.settings-action-row {
+  margin-top: 0.8rem;
+}
+
+/* Roster Stats Overview */
+.roster-stats-overview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.stat-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 0.85rem 0.6rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-box.highlight {
+  border-color: var(--border-gold);
+  background: rgba(245, 208, 97, 0.06);
+}
+
+.stat-num {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  font-family: var(--font-mono);
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08rem;
+  font-weight: 700;
+}
+
+/* Cosmic Toast Notifications */
+.cosmic-toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.cosmic-toast {
+  background: rgba(14, 18, 30, 0.95);
+  border: 1px solid var(--border-gold);
+  backdrop-filter: blur(16px);
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.25s var(--ease-cinematic);
+}
+
+.cosmic-toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cosmic-toast.toast-success {
+  border-color: #22c55e;
+  color: #4ade80;
+}
+
+.cosmic-toast.toast-warning {
+  border-color: #f59e0b;
+  color: #fbbf24;
 }

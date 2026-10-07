@@ -4,6 +4,7 @@ import { PrizeManager, PRIZE_TIERS } from './core/prizes.js';
 import { CosmicScene } from './graphics/cosmicScene.js';
 import { WinnerModal } from './ui/winnerModal.js';
 import { HistoryDrawer } from './ui/historyDrawer.js';
+import { SettingsDrawer } from './ui/settingsDrawer.js';
 import { SoundEngine } from './audio/soundEngine.js';
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -25,6 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const batchButtons      = document.querySelectorAll('.batch-btn');
 
   // Admin & QoL
+  const btnSettings       = document.getElementById('btn-settings');
   const btnClean          = document.getElementById('btn-clean');
   const btnFullscreen     = document.getElementById('btn-fullscreen');
   const btnImport         = document.getElementById('btn-import');
@@ -49,11 +51,29 @@ window.addEventListener('DOMContentLoaded', () => {
       hudTip.textContent = `VOIDED: ${voidedWinner.name} RETURNED TO POOL`;
       setTimeout(() => {
         if (fsm.getState() === States.IDLE) {
-          hudTip.textContent = 'PRESS [SPACE / ENTER] TO COLLAPSE';
+          hudTip.textContent = 'CLICK OR PRESS [SPACE] TO INITIATE DRAW';
         }
       }, 2500);
     }
   });
+
+  // ── Settings Drawer (Referenced from annual-gala-lucky-draw) ──
+  const settingsDrawer = new SettingsDrawer({
+    prizeManager,
+    roster,
+    onSettingsChanged: () => {
+      updateTierDisplay();
+      buildTierMenu();
+      refreshPoolHUD();
+    }
+  });
+
+  if (btnSettings) {
+    btnSettings.addEventListener('click', () => {
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle();
+    });
+  }
 
   // ── HUD Helpers ──
   function refreshPoolHUD() {
@@ -192,12 +212,17 @@ window.addEventListener('DOMContentLoaded', () => {
   // ── Mouse Click Trigger Controls ──
   function handleStageClick(e) {
     // If clicking inside interactive controls, dropdowns, inputs, drawer, ignore
-    if (e.target.closest('button, input, select, .history-drawer, .history-floating-tab, .tier-dropdown-menu, .pool-glass-card')) {
+    if (e.target.closest('button, input, select, .history-drawer, .history-floating-tab, .settings-drawer, .settings-floating-tab, .tier-dropdown-menu, .pool-glass-card')) {
       return;
     }
 
     if (tierMenu.classList.contains('open')) {
       tierMenu.classList.remove('open');
+      return;
+    }
+
+    if (settingsDrawer.isOpen) {
+      settingsDrawer.close();
       return;
     }
 
@@ -279,7 +304,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // 1. Stage State Transitions
     if (e.code === 'Space' || e.code === 'Enter' || e.code === 'PageDown') {
       e.preventDefault();
-      // If history drawer is open, close it on Space/Enter
+      if (settingsDrawer.isOpen) {
+        settingsDrawer.close();
+        return;
+      }
       if (historyDrawer.isOpen) {
         historyDrawer.close();
         return;
@@ -294,6 +322,10 @@ window.addEventListener('DOMContentLoaded', () => {
         tierMenu.classList.remove('open');
         return;
       }
+      if (settingsDrawer.isOpen) {
+        settingsDrawer.close();
+        return;
+      }
       if (historyDrawer.isOpen) {
         historyDrawer.close();
         return;
@@ -302,7 +334,15 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 2. Prize Tier Shortcuts [1-5] (ONLY active in IDLE)
+    // 2. Settings Drawer Shortcut [S]
+    if (e.code === 'KeyS') {
+      e.preventDefault();
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle();
+      return;
+    }
+
+    // 3. Prize Tier Shortcuts [1-5] (ONLY active in IDLE)
     if (fsm.getState() === States.IDLE) {
       if (['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5'].includes(e.code)) {
         const tierId = parseInt(e.code.replace('Digit', ''), 10);
@@ -321,9 +361,10 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 3. History Drawer Shortcut [H]
+    // 4. History Drawer Shortcut [H]
     if (e.code === 'KeyH') {
       e.preventDefault();
+      if (settingsDrawer.isOpen) settingsDrawer.close();
       historyDrawer.toggle();
       return;
     }
