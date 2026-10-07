@@ -26,6 +26,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const batchButtons      = document.querySelectorAll('.batch-btn');
 
   // Admin & QoL
+  const btnRoster         = document.getElementById('btn-roster');
+  const btnWinners        = document.getElementById('btn-winners');
+  const topRosterCount    = document.getElementById('top-roster-count');
+  const topWinnersCount   = document.getElementById('top-winners-count');
   const btnSettings       = document.getElementById('btn-settings');
   const btnClean          = document.getElementById('btn-clean');
   const btnFullscreen     = document.getElementById('btn-fullscreen');
@@ -65,27 +69,74 @@ window.addEventListener('DOMContentLoaded', () => {
       updateTierDisplay();
       buildTierMenu();
       refreshPoolHUD();
+    },
+    onVoidWinner: (voided) => {
+      refreshPoolHUD();
     }
   });
+
+  if (btnRoster) {
+    btnRoster.addEventListener('click', () => {
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle('roster');
+    });
+  }
+
+  if (btnWinners) {
+    btnWinners.addEventListener('click', () => {
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle('winners');
+    });
+  }
 
   if (btnSettings) {
     btnSettings.addEventListener('click', () => {
       if (historyDrawer.isOpen) historyDrawer.close();
-      settingsDrawer.toggle();
+      settingsDrawer.toggle('tiers');
     });
   }
 
   // ── HUD Helpers ──
   function refreshPoolHUD() {
-    hudAvailable.textContent   = roster.getAvailableCount().toLocaleString();
-    hudTotal.textContent       = roster.getPoolSize().toLocaleString();
-    hudWinnerCount.textContent = roster.getWinnerCount().toString();
+    const avail = roster.getAvailableCount();
+    const total = roster.getPoolSize();
+    const winnersCount = roster.getWinnerCount();
+
+    hudAvailable.textContent   = avail.toLocaleString();
+    hudTotal.textContent       = total.toLocaleString();
+    hudWinnerCount.textContent = winnersCount.toString();
+
+    if (topRosterCount) topRosterCount.textContent = total.toString();
+    if (topWinnersCount) topWinnersCount.textContent = winnersCount.toString();
 
     const curTier = prizeManager.getCurrentTier();
     const tierWinners = roster.getWinnersForTier(curTier.key);
     hudTierDrawnCount.textContent = `THIS TIER: ${tierWinners.length} / ${curTier.quota}`;
 
     historyDrawer.updateBadge();
+  }
+
+  // Click pool meta to open candidate roster
+  const poolMeta = document.querySelector('.pool-glass-card');
+  if (poolMeta) {
+    poolMeta.style.cursor = 'pointer';
+    poolMeta.title = 'Click to view Candidate Roster (R)';
+    poolMeta.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') return;
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.open('roster');
+    });
+  }
+
+  // Click awards pill to open winners history
+  const awardsPill = document.querySelector('.stats-glass-pill');
+  if (awardsPill) {
+    awardsPill.style.cursor = 'pointer';
+    awardsPill.title = 'Click to view Winners History (W)';
+    awardsPill.addEventListener('click', () => {
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.open('winners');
+    });
   }
 
   function updateTierDisplay() {
@@ -334,11 +385,27 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 2. Settings Drawer Shortcut [S]
+    // 2. Roster Shortcut [R]
+    if (e.code === 'KeyR') {
+      e.preventDefault();
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle('roster');
+      return;
+    }
+
+    // 3. Winners History Shortcut [W]
+    if (e.code === 'KeyW') {
+      e.preventDefault();
+      if (historyDrawer.isOpen) historyDrawer.close();
+      settingsDrawer.toggle('winners');
+      return;
+    }
+
+    // 4. Settings Drawer Shortcut [S]
     if (e.code === 'KeyS') {
       e.preventDefault();
       if (historyDrawer.isOpen) historyDrawer.close();
-      settingsDrawer.toggle();
+      settingsDrawer.toggle('tiers');
       return;
     }
 
